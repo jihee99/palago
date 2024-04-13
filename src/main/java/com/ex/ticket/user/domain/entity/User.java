@@ -2,7 +2,11 @@ package com.ex.ticket.user.domain.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.ex.ticket.common.domain.BaseTimeEntity;
+import com.ex.ticket.user.domain.dto.request.SignUpRequest;
+import com.ex.ticket.user.exception.ForbiddenUserException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,14 +62,13 @@ public class User extends BaseTimeEntity {
 	// 	return UserProfileVo.from(this);
 	// }
 
-
-	// public User(SignUpRequest request, PasswordEncoder passwordEncoder) {
-	// 	this.email = request.email();
-	// 	this.password = passwordEncoder.encode(request.password());
-	// 	this.name = request.name();
-	// 	this.accountRole = AccountRole.USER;
-	// 	this.accountState = AccountState.NORMAL;
-	// }
+	public User(SignUpRequest request, PasswordEncoder passwordEncoder) {
+		this.email = request.getEmail();
+		this.password = passwordEncoder.encode(request.getPassword());
+		this.name = request.getName();
+		this.accountRole = AccountRole.USER;
+		this.accountState = AccountState.NORMAL;
+	}
 
 	public static User from(String email, String name, String password) {
 		return User.builder()
@@ -77,12 +80,12 @@ public class User extends BaseTimeEntity {
 			.build();
 	}
 
-	// public void login() {
-	// 	if (!AccountState.NORMAL.equals(this.accountState)) {
-	// 		throw ForbiddenUserException.EXCEPTION;
-	// 	}
-	// 	lastLoginAt = LocalDateTime.now();
-	// }
+	public void login() {
+		if (!AccountState.NORMAL.equals(this.accountState)) {
+			throw ForbiddenUserException.EXCEPTION;
+		}
+		lastLoginAt = LocalDateTime.now();
+	}
 
 	// public void update(UserUpdateRequest newMember, PasswordEncoder passwordEncoder) {
 	// 	this.password = newMember.newPassword() == null || newMember.newPassword().isBlank()
