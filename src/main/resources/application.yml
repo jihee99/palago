@@ -1,5 +1,3 @@
-server:
-  port: 8081
 spring:
   jpa:
     hibernate:
@@ -26,13 +24,13 @@ spring:
 #          starttls:
 #            enable: true
 #          auth: true
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      timeout: 6
-      repositories:
-        enabled: false
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#      timeout: 6
+#      repositories:
+#        enabled: false
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
