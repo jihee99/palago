@@ -1,0 +1,61 @@
+server:
+  port: 8081
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/coupon_ex
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: oosoojh31@gmail.com
+#    password: sqtupkwcndqbwpis
+#    properties:
+#      mail:
+#        smtp:
+#          starttls:
+#            enable: true
+#          auth: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 6
+      repositories:
+        enabled: false
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  paths-to-match: /**
+  swagger-ui:
+    path: /
+    display-request-duration: true
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+  api-docs:
+    groups:
+      enabled: true
+
+jasypt:
+  encryptor:
+    bean: propertyEncryptor
+  secret-key: ${JASYPT_PASSWORD}
+
+auth:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY:testkeytestkeytestkeytestkeytestkeytestkeytestkeytestkeytestkey}
+    access-exp: ${JWT_ACCESS_EXP:3600}
+    refresh-exp: ${JWT_REFRESH_EXP:3600}
