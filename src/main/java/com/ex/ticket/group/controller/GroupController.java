@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Tag(name = "2. 그룹관리 API")
+@Tag(name = "2. 그룹관리 API(매니저용)")
 @RequestMapping("/api/group/manage")
 @RestController
 @RequiredArgsConstructor
