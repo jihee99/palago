@@ -2,31 +2,37 @@ package com.ex.ticket;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ViewController {
 
-	@GetMapping("/")
+	@GetMapping("/home")
 	public String index(){
 		return "index";
 	}
 
-	@GetMapping("/mypage")
+	@PostMapping("/token")
+	public String token(){
+		return "token";
+	}
+
+	@GetMapping("/api/mypage")
 	public String user(){
 		return "user";
 	}
 
-	@GetMapping("/group/event")
+	@GetMapping("/api/group/event")
 	public String manager(){
 		return "manager";
 	}
 
-	@GetMapping("/group/master")
+	@GetMapping("/api/group/master")
 	public String master(){
 		return "master";
 	}
 
-	@GetMapping("/system")
+	@GetMapping("/api/system")
 	public String system(){ return "admin"; }
 
 	@GetMapping("/login")
