@@ -1,6 +1,9 @@
 package com.ex.ticket.security.jwt;
 
 import java.io.IOException;
+import java.util.Date;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,9 +12,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ex.ticket.auth.PrincipalDetails;
+import com.ex.ticket.common.PalagoStatic;
+import com.ex.ticket.security.SecretHolder;
 import com.ex.ticket.user.domain.dto.request.SignInRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +32,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final AuthenticationManager authenticationManager;
 
+	private final TokenService tokenService;
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 		throws AuthenticationException
@@ -31,16 +43,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		try {
 
 			// 1. username, password 받기
-/*			BufferedReader br = request.getReader();
 
-			String input = null;
-			while((input = br.readLine()) != null) {
-				System.out.println(input);
-			}*/
-			// SignInRequest signInRequest = getSignInRequest(request.getInputStream());
-
-			ObjectMapper mapper = new ObjectMapper();
-			SignInRequest signInRequest = mapper.readValue(request.getInputStream(), SignInRequest.class);
+			SignInRequest signInRequest = getSignInRequest(request.getInputStream());
 
 			// 2. 로그인 시도 > authenticationManager 로 로그인 시도 > PrincipalDetailsService 호출 후 loadByUsername 자동 호출
 			UsernamePasswordAuthenticationToken authenticationToken = createUsernamePasswordAuthenticationToken(signInRequest);
@@ -77,5 +81,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		return new UsernamePasswordAuthenticationToken(
 			signInRequest.getUsername(), signInRequest.getPassword());
 	}
+
+	@Override
+	public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws
+		ServletException,
+		IOException {
+
+		String grantedAuthority = authResult.getAuthorities().stream().findAny().orElseThrow().toString();
+		String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
+
+		response.addHeader(PalagoStatic.AUTH_HEADER, PalagoStatic.BEARER + access);
+		System.out.println("---success authentication---");
+	}
+
 
 }

@@ -13,11 +13,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.filter.CorsFilter;
 
 import com.ex.ticket.security.filter.MyFilter3;
 import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
+import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
+import com.ex.ticket.security.jwt.TokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +39,9 @@ public class SecurityConfig {
 	}
 
 	private final AuthenticationConfiguration authenticationConfiguration;
+
+	private final TokenService tokenService;
+
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -56,10 +62,13 @@ public class SecurityConfig {
 			.addFilter(corsFilter)
 			.formLogin(AbstractHttpConfigurer::disable)
 
-			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)),
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService),
 				UsernamePasswordAuthenticationFilter.class)
 
-			// AuthenticationManager 을 필수로 전달줘야함
+			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration)),
+				BasicAuthenticationFilter.class)
+
+			// AuthenticationManager 을 필수로 전달해줘야함
 
 			.authorizeHttpRequests(requests -> requests
 				// .requestMatchers(allowedUrls).permitAll()
