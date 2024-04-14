@@ -25,12 +25,12 @@ public class AuthController {
 	private final LoginService loginService;
 
 	@Operation(summary = "회원가입")
-	@PostMapping("/join/us")
+	@PostMapping("/join")
 	public String join(
 		SignUpRequest request
 	) {
 		signUpService.execute(request);
-		return "joinForm";
+		return "redirect:/home";
 	}
 
 	// @Operation(summary = "로그인")

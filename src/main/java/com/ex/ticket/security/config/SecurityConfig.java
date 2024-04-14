@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final String[] allowedUrls = {"/swagger-ui/**", "/join", "/join/us", "/login", "/login/us", "/error", "/ticket/**"};
+	private final String[] allowedUrls = {"/swagger-ui/**", "/join", "/join/us", "/login", "/login/us", "/error", "/event/**"};
 	private final CorsFilter corsFilter;
 
 	private final UserRepository userRepository;
@@ -65,7 +65,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 				.requestMatchers(allowedUrls).permitAll()
 
-				.requestMatchers("/login/us").permitAll()
+				// .requestMatchers("/login/us").permitAll()
 				.requestMatchers("/api/mypage/**").hasAuthority("USER")
 				.requestMatchers("/api/group/master/**").hasAuthority("MASTER")
 				.requestMatchers("/api/group/ticket/**").hasAnyAuthority("MASTER", "MANAGER")

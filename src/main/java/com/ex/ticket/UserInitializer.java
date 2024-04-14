@@ -27,15 +27,44 @@ public class UserInitializer implements ApplicationRunner {
 
 		User user = User.builder()
 			// .username("test1")test1
-			.email("user-test1@test.com")
+			.email("user1@test.com")
 			.password(passwordEncoder.encode("1234"))
 			.name("테스트사용자1")
 			.accountRole(AccountRole.USER)
 			.accountState(AccountState.NORMAL)
 			.build();
 
+	   User manager = User.builder()
+		   // .username("test1")test1
+		   .email("manager1@test.com")
+		   .password(passwordEncoder.encode("1234"))
+		   .name("테스트매니저1")
+		   .accountRole(AccountRole.MANAGER)
+		   .accountState(AccountState.NORMAL)
+		   .build();
+
+	   User master = User.builder()
+		   // .username("test1")test1
+		   .email("master1@test.com")
+		   .password(passwordEncoder.encode("1234"))
+		   .name("테스트마스터1")
+		   .accountRole(AccountRole.MASTER)
+		   .accountState(AccountState.NORMAL)
+		   .build();
+
+	   User admin = User.builder()
+		   // .username("test1")test1
+		   .email("admin@system.com")
+		   .password(passwordEncoder.encode("1234"))
+		   .name("관리자")
+		   .accountRole(AccountRole.ADMIN)
+		   .accountState(AccountState.NORMAL)
+		   .build();
 
 	   userRepository.save(user);
+	   userRepository.save(manager);
+	   userRepository.save(master);
+	   userRepository.save(admin);
 
    }
 }
