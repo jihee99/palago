@@ -48,7 +48,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			return;
 		}
 
-
 		// jwt 토큰을 검증해서 정상적인 사용자인지 확인
 		String jwtToken = request.getHeader(PalagoStatic.AUTH_HEADER).replace(PalagoStatic.BEARER, "");
 
@@ -58,7 +57,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		User user = userRepository.findByEmail(accessTokenInfo.getEmail()).orElseThrow();
 		PrincipalDetails principalDetails = new PrincipalDetails(user);
 
-		// Jwt 토큰 서명을 통해서 서명이 정상이면 authentication 객체를 만들어준다.
+		// Jwt 토큰 서명을 통해서 서명이 정상이면 authentication 객체를 만가어준다.
 		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
