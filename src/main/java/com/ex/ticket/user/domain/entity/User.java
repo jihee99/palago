@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ex.ticket.common.domain.BaseTimeEntity;
+import com.ex.ticket.common.vo.UserInfoVo;
+import com.ex.ticket.common.vo.UserProfileVo;
 import com.ex.ticket.user.domain.dto.request.SignUpRequest;
 import com.ex.ticket.user.exception.ForbiddenUserException;
 
@@ -58,10 +60,6 @@ public class User extends BaseTimeEntity {
 	@Builder.Default
 	private LocalDateTime lastLoginAt = LocalDateTime.now();
 
-	// public UserProfileVo toUserProfileVo() {
-	// 	return UserProfileVo.from(this);
-	// }
-
 	public User(SignUpRequest request, PasswordEncoder passwordEncoder) {
 		this.email = request.getEmail();
 		this.password = passwordEncoder.encode(request.getPassword());
@@ -95,22 +93,27 @@ public class User extends BaseTimeEntity {
 	// 	this.phoneNumber = newMember.phoneNumber();
 	// }
 
-	// public UserInfoVo toUserInfoVo() {
-	// 	return UserInfoVo.from(this);
-	// }
+	public UserProfileVo toUserProfileVo() {
+		return UserProfileVo.from(this);
+	}
+
+
+	public UserInfoVo toUserInfoVo() {
+		return UserInfoVo.from(this);
+	}
 
 	// public EmailUserInfo toEmailUserInfo() {
 	// 	return new EmailUserInfo(this.name, this.email);
 	// }
 
-	// public Boolean isDeletedUser() {
-	// 	return accountState == AccountState.DELETED;
-	// }
+	public Boolean isDeletedUser() {
+		return accountState == AccountState.DELETED;
+	}
 
 
-	// public void updateAccountRole(AccountRole type){
-	// 	this.accountRole = type;
-	// }
+	public void updateAccountRole(AccountRole type){
+		this.accountRole = type;
+	}
 
 	// @PostPersist
 	// public void registerEvent() {

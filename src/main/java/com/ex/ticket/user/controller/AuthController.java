@@ -1,13 +1,11 @@
 package com.ex.ticket.user.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ex.ticket.user.domain.dto.request.SignInRequest;
 import com.ex.ticket.user.domain.dto.request.SignUpRequest;
-import com.ex.ticket.user.service.LoginService;
-import com.ex.ticket.user.service.SignUpService;
+import com.ex.ticket.user.service.LoginUseCase;
+import com.ex.ticket.user.service.SignupUseCase;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,16 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "0. 회원 가입 및 로그인 관련 API")
 public class AuthController {
 
-	private final SignUpService signUpService;
+	private final SignupUseCase signupUseCase;
 
-	private final LoginService loginService;
+	private final LoginUseCase loginUseCase;
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/join")
 	public String join(
 		SignUpRequest request
 	) {
-		signUpService.execute(request);
+		signupUseCase.execute(request);
 		return "redirect:/home";
 	}
 

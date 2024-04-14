@@ -68,6 +68,7 @@ public class SecurityConfig {
 				// .requestMatchers("/login/us").permitAll()
 				.requestMatchers("/api/mypage/**").hasAuthority("USER")
 				.requestMatchers("/api/group/master/**").hasAuthority("MASTER")
+				.requestMatchers("/api/group/manage/**").hasAnyAuthority("MASTER", "MANAGER")
 				.requestMatchers("/api/group/ticket/**").hasAnyAuthority("MASTER", "MANAGER")
 				.requestMatchers("/api/group/event/**").hasAnyAuthority("MASTER", "MANAGER")
 				.requestMatchers("/api/system/**").hasAuthority("ADMIN")
