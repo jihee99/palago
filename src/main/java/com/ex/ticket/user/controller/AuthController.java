@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ex.ticket.user.domain.dto.request.SignInRequest;
 import com.ex.ticket.user.domain.dto.request.SignUpRequest;
+import com.ex.ticket.user.service.LoginService;
 import com.ex.ticket.user.service.SignUpService;
 
 import io.swagger.v3.oas.annotations.Operation;
