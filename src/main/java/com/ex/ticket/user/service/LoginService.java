@@ -22,7 +22,7 @@ public class LoginService {
 
 	@Transactional(readOnly = true)
 	public SignInResponse execute(SignInRequest request) {
-		User user = userRepository.findByEmail(request.getEmail())
+		User user = userRepository.findByEmail(request.getUsername())
 			.filter(it -> encoder.matches(request.getPassword(), it.getPassword()))
 			.orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
 

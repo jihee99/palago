@@ -9,7 +9,7 @@ import lombok.Setter;
 public class SignInRequest {
 
     @Schema(description = "회원 이메일", example = "user@test.com")
-    private String email;
+    private String username;
 
     @Schema(description = "회원 비밀번호", example = "1234")
     private String password;

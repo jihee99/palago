@@ -2,6 +2,9 @@ package com.ex.ticket.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -9,10 +12,12 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.filter.CorsFilter;
 
 import com.ex.ticket.security.filter.MyFilter3;
+import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,19 +27,26 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final String[] allowedUrls = {"/swagger-ui/**", "/join", "/join/us", "/login", "/login/us", "/error", "/ticket/**"};
-
 	private final CorsFilter corsFilter;
+
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	private final AuthenticationConfiguration authenticationConfiguration;
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
 		http
-			.addFilterBefore(new MyFilter3(), SecurityContextHolderFilter.class)
+			// .addFilterBefore(new MyFilter3(), SecurityContextHolderFilter.class)
 
 			.csrf(CsrfConfigurer<HttpSecurity>::disable)
 			.httpBasic((httpBasic) -> httpBasic.disable())
@@ -43,11 +55,11 @@ public class SecurityConfig {
 
 			.addFilter(corsFilter)
 			.formLogin(AbstractHttpConfigurer::disable)
-			// .formLogin(formLogin -> formLogin
-			// 	.loginPage("/login")
-			// 	.loginProcessingUrl("/login/us")
-			// 	.defaultSuccessUrl("/")
-			// )
+
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)),
+				UsernamePasswordAuthenticationFilter.class)
+
+			// AuthenticationManager 을 필수로 전달줘야함
 
 			.authorizeHttpRequests(requests -> requests
 				// .requestMatchers(allowedUrls).permitAll()
@@ -65,5 +77,6 @@ public class SecurityConfig {
 		return http.build();
 
 	}
+
 
 }

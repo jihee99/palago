@@ -35,7 +35,7 @@ public class ViewController {
 	@GetMapping("/api/system")
 	public String system(){ return "admin"; }
 
-	@GetMapping("/login")
+	@GetMapping("/login/us")
 	public String loginForm(){
 		return "loginForm";
 	}
