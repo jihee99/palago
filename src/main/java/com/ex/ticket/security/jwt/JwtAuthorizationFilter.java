@@ -6,17 +6,25 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.ex.ticket.common.PalagoStatic;
+import com.ex.ticket.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	// 권한이나 인증이 필요한 특정 주소를 요청했을 때 authorization filter 타게 되어있음
 
-	public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+	private final TokenService tokenService;
+	private final UserRepository userRepository;
+
+	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, TokenService tokenService, UserRepository userRepository) {
 		super(authenticationManager);
+		this.tokenService = tokenService;
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -26,8 +34,32 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		super.doFilterInternal(request, response, chain);
 		System.out.println("인증이나 권한이 필요한 주소가 요청됨");
 
-		// String header 값을 확인한다.
-		String header = request.getHeader(PalagoStatic.AUTH_HEADER);
-		System.out.println("header : "+header);
+		// header가 있는지 확인
+		if (isNullToken(request)) {
+			chain.doFilter(request, response);
+			return;
+		}
+
+		// jwt 토큰을 검증해서 정상적인 사용자인지 확인
+		String jwtToken = request.getHeader(PalagoStatic.AUTH_HEADER).replace(PalagoStatic.BEARER, "");
+
+
 	}
+
+
+	private boolean isNullToken(HttpServletRequest request) {
+		String jwtHeader = request.getHeader(PalagoStatic.AUTH_HEADER);
+		System.out.println("header : " + jwtHeader);
+		if (jwtHeader == null || !jwtHeader.startsWith(PalagoStatic.BEARER)) {
+			return true;
+		}
+
+		// 다음엔 얘가 access token이 맞는지 체크
+		// if (jwtHeader == null || !jwtHeader.startsWith(ACCESS_TOKEN_PREFIX)) {
+		// 	return true;
+		// }
+
+		return false;
+	}
+
 }

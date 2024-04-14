@@ -3,7 +3,6 @@ package com.ex.ticket.security.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,13 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import com.ex.ticket.security.filter.MyFilter3;
 import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
 import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
 import com.ex.ticket.security.jwt.TokenService;
+import com.ex.ticket.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +30,7 @@ public class SecurityConfig {
 	private final String[] allowedUrls = {"/swagger-ui/**", "/join", "/join/us", "/login", "/login/us", "/error", "/ticket/**"};
 	private final CorsFilter corsFilter;
 
+	private final UserRepository userRepository;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -65,9 +64,7 @@ public class SecurityConfig {
 			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService),
 				UsernamePasswordAuthenticationFilter.class)
 
-			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration)),
-				BasicAuthenticationFilter.class)
-
+			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository), BasicAuthenticationFilter.class)
 			// AuthenticationManager 을 필수로 전달해줘야함
 
 			.authorizeHttpRequests(requests -> requests

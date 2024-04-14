@@ -2,6 +2,7 @@ package com.ex.ticket.security.jwt;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ex.ticket.auth.PrincipalDetails;
@@ -86,6 +88,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws
 		ServletException,
 		IOException {
+
+
+		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+		// System.out.println(principalDetails.getUsername());
+		// String authoritiesAsString = principalDetails.getAuthorities().stream()
+		// 	.map(GrantedAuthority::getAuthority)
+		// 	.collect(Collectors.joining(", "));
+		// System.out.println("Authorities: " + authoritiesAsString);
 
 		String grantedAuthority = authResult.getAuthorities().stream().findAny().orElseThrow().toString();
 		String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
