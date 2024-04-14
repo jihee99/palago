@@ -11,7 +11,7 @@ import com.ex.ticket.user.domain.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String account);
+    Optional<User> findByEmail(String email);
 
     List<User> findAllByAccountRole(AccountRole role);
 

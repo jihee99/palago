@@ -3,9 +3,17 @@ package com.ex.ticket.security.jwt;
 import java.io.IOException;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
+import com.ex.ticket.auth.PrincipalDetails;
 import com.ex.ticket.common.PalagoStatic;
+import com.ex.ticket.common.domain.dto.AccessTokenInfo;
+import com.ex.ticket.user.domain.entity.User;
 import com.ex.ticket.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
@@ -31,25 +39,38 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-		super.doFilterInternal(request, response, chain);
+
 		System.out.println("인증이나 권한이 필요한 주소가 요청됨");
 
 		// header가 있는지 확인
-		if (isNullToken(request)) {
+		if(isNullToken(request)) {
 			chain.doFilter(request, response);
 			return;
 		}
 
+
 		// jwt 토큰을 검증해서 정상적인 사용자인지 확인
 		String jwtToken = request.getHeader(PalagoStatic.AUTH_HEADER).replace(PalagoStatic.BEARER, "");
 
+		AccessTokenInfo accessTokenInfo = tokenService.parseAccessToken(jwtToken);
+		System.out.println(accessTokenInfo.getEmail() + "  " + accessTokenInfo.getRole());
 
+		User user = userRepository.findByEmail(accessTokenInfo.getEmail()).orElseThrow();
+		PrincipalDetails principalDetails = new PrincipalDetails(user);
+
+		// Jwt 토큰 서명을 통해서 서명이 정상이면 authentication 객체를 만들어준다.
+		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		chain.doFilter(request, response);
 	}
 
 
 	private boolean isNullToken(HttpServletRequest request) {
 		String jwtHeader = request.getHeader(PalagoStatic.AUTH_HEADER);
-		System.out.println("header : " + jwtHeader);
+		System.out.println("header : "+ jwtHeader);
+
 		if (jwtHeader == null || !jwtHeader.startsWith(PalagoStatic.BEARER)) {
 			return true;
 		}

@@ -33,13 +33,13 @@ public class AuthController {
 		return "joinForm";
 	}
 
-	@Operation(summary = "로그인")
-	@PostMapping("/login")
-	public String signIn(@RequestBody SignInRequest request) {
-		loginService.execute(request);
-		return "SUCCESS";
-		// return ApiResponse.success(loginService.execute(request));
-	}
+	// @Operation(summary = "로그인")
+	// @PostMapping("/login")
+	// public String signIn(@RequestBody SignInRequest request) {
+	// 	loginService.execute(request);
+	// 	return "redore";
+	// 	// return ApiResponse.success(loginService.execute(request));
+	// }
 
 
 }

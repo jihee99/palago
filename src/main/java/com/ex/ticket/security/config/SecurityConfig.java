@@ -61,24 +61,28 @@ public class SecurityConfig {
 			.addFilter(corsFilter)
 			.formLogin(AbstractHttpConfigurer::disable)
 
-			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService),
-				UsernamePasswordAuthenticationFilter.class)
-
-			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository), BasicAuthenticationFilter.class)
-			// AuthenticationManager 을 필수로 전달해줘야함
 
 			.authorizeHttpRequests(requests -> requests
-				// .requestMatchers(allowedUrls).permitAll()
+				.requestMatchers(allowedUrls).permitAll()
 
-				.requestMatchers("/api/mypage/**").hasRole("USER")
-				.requestMatchers("/api/group/master/**").hasRole("MASTER")
-				.requestMatchers("/api/group/ticket/**").hasAnyRole("MASTER", "MANAGER")
-				.requestMatchers("/api/group/event/**").hasAnyRole("MASTER", "MANAGER")
-				.requestMatchers("/api/system/**").hasRole("ADMIN")
+				.requestMatchers("/login/us").permitAll()
+				.requestMatchers("/api/mypage/**").hasAuthority("USER")
+				.requestMatchers("/api/group/master/**").hasAuthority("MASTER")
+				.requestMatchers("/api/group/ticket/**").hasAnyAuthority("MASTER", "MANAGER")
+				.requestMatchers("/api/group/event/**").hasAnyAuthority("MASTER", "MANAGER")
+				.requestMatchers("/api/system/**").hasAuthority("ADMIN")
 
 				// .anyRequest().authenticated()
 				.anyRequest().permitAll()
-			);
+			)
+
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
+				UsernamePasswordAuthenticationFilter.class)
+
+			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
+				BasicAuthenticationFilter.class)
+		// AuthenticationManager 을 필수로 전달해줘야함
+		;
 
 		return http.build();
 

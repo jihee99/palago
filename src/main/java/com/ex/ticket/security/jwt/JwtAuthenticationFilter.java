@@ -17,6 +17,8 @@ import com.ex.ticket.auth.PrincipalDetails;
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.security.SecretHolder;
 import com.ex.ticket.user.domain.dto.request.SignInRequest;
+import com.ex.ticket.user.domain.entity.User;
+import com.ex.ticket.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
@@ -28,13 +30,17 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
 
 	private final TokenService tokenService;
+
+	private final UserRepository userRepository;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -57,11 +63,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// 3. PrincipalDetails 를 세션에 담고
 			// authentication 객체가 session 영역에 저장됨
 			PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-			System.out.println(principalDetails.getUsername());
-
 
 			// 4. Jwt 토큰을 만들어서 응답
-
 			return authentication;
 
 		} catch (IOException e) {
@@ -97,8 +100,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// 	.collect(Collectors.joining(", "));
 		// System.out.println("Authorities: " + authoritiesAsString);
 
-		String grantedAuthority = authResult.getAuthorities().stream().findAny().orElseThrow().toString();
-		String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
+		// String grantedAuthority = authResult.getAuthorities().stream().findAny().orElseThrow().toString();
+
+		String grantedAuthority = authResult.getAuthorities().stream()
+			.map(GrantedAuthority::getAuthority)
+			.findAny()
+			.orElseThrow()
+			.toString();
+
+		log.info("authResult 로 가져와볼것이다.");
+		log.info("{} {}", ((PrincipalDetails)authResult.getPrincipal()).getUsername(), grantedAuthority);
+		// String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
+
+		String access = tokenService.generateAccessToken(principalDetails.getUsername(), grantedAuthority);
 
 		response.addHeader(PalagoStatic.AUTH_HEADER, PalagoStatic.BEARER + access);
 		System.out.println("---success authentication---");

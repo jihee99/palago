@@ -19,7 +19,7 @@ public class PrincipalDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collectors = new ArrayList<>();
-		collectors.add(() -> { return "ROLE_" + user.getAccountRole(); });
+		collectors.add(() -> { return String.valueOf(user.getAccountRole()); });
 
 		return collectors;
 	}

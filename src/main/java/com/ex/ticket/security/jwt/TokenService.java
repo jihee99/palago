@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.common.domain.dto.AccessTokenInfo;
+import com.ex.ticket.user.exception.InvalidTokenException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -64,16 +65,28 @@ public class TokenService {
 		return getJws(token).getBody().get(PalagoStatic.TOKEN_TYPE).equals(PalagoStatic.REFRESH_TOKEN);
 	}
 
+// 	public AccessTokenInfo parseAccessTㅈoken(String token) {
+// 		if (isAccessToken(token)) {
+// 			Claims claims = getJws(token).getBody();
+// 			return AccessTokenInfo.builder()
+// 				.userId(Long.parseLong(claims.getSubject()))
+// //				.email(claims.getSubject())
+// 				.role((String) claims.get(PalagoStatic.TOKEN_ROLE))
+// 				.build();
+// 		}
+// 		// throw InvalidTokenException.EXCEPTION;
+// 		return null;
+// 	}
+
 	public AccessTokenInfo parseAccessToken(String token) {
 		if (isAccessToken(token)) {
 			Claims claims = getJws(token).getBody();
 			return AccessTokenInfo.builder()
-				.userId(Long.parseLong(claims.getSubject()))
-//				.email(claims.getSubject())
+				.email(claims.getSubject())
 				.role((String) claims.get(PalagoStatic.TOKEN_ROLE))
 				.build();
 		}
-		// throw InvalidTokenException.EXCEPTION;
-		return null;
+		throw InvalidTokenException.EXCEPTION;
 	}
+
 }
