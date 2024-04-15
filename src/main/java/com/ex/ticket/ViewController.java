@@ -1,11 +1,11 @@
 package com.ex.ticket;
 
-import java.security.Principal;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 public class ViewController {
@@ -18,7 +18,7 @@ public class ViewController {
 			System.out.println(username);
 			model.addAttribute("username", username); // 모델에 사용자 이름을 추가하여 화면에 전달
 		}
-		return "index";
+		return "test/index";
 	}
 
 	@PostMapping("/token")
