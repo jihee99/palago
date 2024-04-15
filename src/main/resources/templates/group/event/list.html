@@ -5,7 +5,10 @@
       layout:decorate="~{layout/group}"
 >
 <head>
-    <th:block layout:fragment="page_css"></th:block>
+    <th:block layout:fragment="page_css">
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">-->
+
+    </th:block>
 </head>
 <body>
     <th:block layout:fragment="content_body">
@@ -392,7 +395,7 @@
                 <div class="modal-body">
                     <form id="registerForm">
                         <label for="name" class="form-label">이벤트명</label>
-                        <input type="password" id="name" name="name" class="form-control" aria-describedby="passwordHelpBlock">
+                        <input type="text" id="name" name="name" class="form-control">
 
                         <label for="datetimepicker1" class="form-label mt-3">오픈일시</label>
                         <input id="datetimepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
@@ -412,6 +415,10 @@
     </th:block>
 
     <th:block layout:fragment="page_js">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!--        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>-->
+
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script th:src="@{/js/group/event/list.js}"></script>
     </th:block>

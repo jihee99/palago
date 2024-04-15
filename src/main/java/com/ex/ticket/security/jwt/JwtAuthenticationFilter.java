@@ -16,6 +16,7 @@
 	import com.ex.ticket.auth.PrincipalDetails;
 	import com.ex.ticket.common.PalagoStatic;
 	import com.ex.ticket.security.SecretHolder;
+	import com.ex.ticket.security.handler.CustomAuthenticationSuccessHandler;
 	import com.ex.ticket.user.domain.dto.request.SignInRequest;
 	import com.ex.ticket.user.domain.entity.User;
 	import com.ex.ticket.user.repository.UserRepository;
@@ -37,10 +38,11 @@
 	public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 		private final AuthenticationManager authenticationManager;
-
 		private final TokenService tokenService;
 
 		private final UserRepository userRepository;
+
+		private final CustomAuthenticationSuccessHandler successHandler;
 
 		@Override
 		public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -72,7 +74,6 @@
 				// throw new RuntimeException(e);
 				return super.attemptAuthentication(request, response);
 			}
-
 
 		}
 
@@ -115,6 +116,7 @@
 
 			response.addHeader(PalagoStatic.AUTH_HEADER, PalagoStatic.BEARER + access);
 			System.out.println("---success authentication---");
+			successHandler.onAuthenticationSuccess(request, response, authResult);
 		}
 
 		@Override

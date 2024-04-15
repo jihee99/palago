@@ -65,7 +65,7 @@ public class GroupService {
 	}
 
 	/* 본인이 마스터인 그룹을 가져오는 쿼리 */
-	public List<Group> findAllByMasterUserId(Long userId) {
+	public Group findAllByMasterUserId(Long userId) {
 		return groupRepository.findAllByMasterUserId(userId);
 	}
 

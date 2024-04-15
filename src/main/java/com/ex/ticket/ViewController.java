@@ -49,11 +49,11 @@ public class ViewController {
 
 	@GetMapping("/login/us")
 	public String loginForm(){
-		return "loginForm";
+		return "user/loginForm";
 	}
 
 	@GetMapping("/join/us")
-	public String joinForm() { return "joinForm"; }
+	public String joinForm() { return "user/joinForm"; }
 
 
 }

@@ -11,11 +11,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @Tag(name = "3. 이벤트 관리 API (그룹용)")
-@RequestMapping("/api/v1/manager")
+@RequestMapping("/api/group/event")
 @RequiredArgsConstructor
 public class GroupEventController {
 
@@ -27,8 +30,9 @@ public class GroupEventController {
 	private final DeleteEventUseCase deleteEventUseCase;
 
 	@Operation(summary = "전시 기본 정보를 등록하여, 새로운 이벤트를 생성합니다.")
-	@PostMapping
+	@PostMapping("/register")
 	public EventResponse createEvent(@RequestBody @Valid CreateEventRequest createEventRequest) {
+		log.info("{} {} {}", createEventRequest.getName(), createEventRequest.getStartAt(), createEventRequest.getRunTime());
 		return createEventUseCase.execute(createEventRequest);
 	}
 

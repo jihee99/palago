@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ex.ticket.group.domain.entity.Group;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    List<Group> findAllByMasterUserId(Long userId);
+    Group findAllByMasterUserId(Long userId);
 
     List<Group> findAllByGroupUsers_UserId(Long userId);
 

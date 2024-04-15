@@ -8,11 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class CreateEventRequest {
 	@Schema(defaultValue = "1", description = "그룹 고유 아이디")
@@ -26,12 +29,12 @@ public class CreateEventRequest {
 
 	@Schema(
 		type = "string",
-		pattern = "yyyy.MM.dd HH:mm",
+		pattern = "yyyy-MM-dd HH:mm",
 		defaultValue = "2024.03.01 10:00",
 		description = "전시 시작 시각")
 	@NotNull(message = "전시 시작일을 입력하세요.")
 	@Future(message = "전시 시작일은 현재보다 이후여야 합니다.")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
 	private LocalDateTime startAt;
 
 	@Schema(defaultValue = "30", description = "소요시간")

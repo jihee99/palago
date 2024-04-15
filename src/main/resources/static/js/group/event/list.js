@@ -6,8 +6,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 $(document).ready(function(){
-    $('#datetimepicker1').datetimepicker();
 
+    $('#datetimepicker1').datetimepicker({
+        format:'Y-m-d H:i',
+        minDate: new Date()
+    });
     // 이벤트 등록 함수
     function registerEvent(){
         console.log("event register button click function");
@@ -18,8 +21,22 @@ $(document).ready(function(){
             'runTime': $('#runTime').val()
         };
 
-        w
-
+        $.ajax({
+            type: "POST",
+            url: "/api/group/event/register",
+            contentType: "application/json",
+            data: JSON.stringify(param), // param 객체를 JSON 문자열로 변환하여 전송합니다.
+            success: function(response){
+                // 요청이 성공했을 때의 동작을 정의합니다.
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+            },
+            error: function(xhr, status, error){
+                // 요청이 실패했을 때의 동작을 정의합니다.
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+            }
+        });
     }
 
     window.registerEvent = registerEvent;

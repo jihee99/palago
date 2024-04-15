@@ -32,9 +32,9 @@ public class UserUtils {
 		}
 
 		if (authentication.isAuthenticated() && !CollectionUtils.containsAny(authentication.getAuthorities(), notUserAuthority)) {
-			User member = userRepository.findByEmail(authentication.getName())
+			User user = userRepository.findByEmail(authentication.getName())
 					.orElseThrow(() -> UserNotFoundException.EXCEPTION);
-			return member.getUserId();
+			return user.getUserId();
 		}
 		// 스웨거 유저일시 익명 유저 취급
 		// 익명유저시 userId 0 반환

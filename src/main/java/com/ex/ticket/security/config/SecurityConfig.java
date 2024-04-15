@@ -1,5 +1,8 @@
 package com.ex.ticket.security.config;
 
+import com.ex.ticket.security.handler.CustomAuthenticationSuccessHandler;
+import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
+import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
 import com.ex.ticket.security.jwt.TokenService;
 import com.ex.ticket.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,8 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -34,6 +39,11 @@ public class SecurityConfig {
 	private final AuthenticationConfiguration authenticationConfiguration;
 
 	private final TokenService tokenService;
+
+	@Bean
+	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+		return new CustomAuthenticationSuccessHandler();
+	}
 
 
 	@Bean
@@ -70,11 +80,11 @@ public class SecurityConfig {
 				.anyRequest().permitAll()
 			)
 
-//			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
-//				UsernamePasswordAuthenticationFilter.class)
-//
-//			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
-//				BasicAuthenticationFilter.class)
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository, customAuthenticationSuccessHandler()),
+				UsernamePasswordAuthenticationFilter.class)
+
+			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
+				BasicAuthenticationFilter.class)
 		// AuthenticationManager 을 필수로 전달해줘야함
 		;
 
