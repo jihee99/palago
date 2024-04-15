@@ -26,24 +26,24 @@ public class EventMapper {
 
 	public Event toEntity(CreateEventRequest createEventRequest) {
 		return Event.builder()
-			.groupId(createEventRequest.getGroupId())
-			.name(createEventRequest.getName())
-			.startAt(createEventRequest.getStartAt())
-			.runTime(createEventRequest.getRunTime())
-			.build();
+				.groupId(createEventRequest.getGroupId())
+				.name(createEventRequest.getName())
+				.startAt(createEventRequest.getStartAt())
+				.runTime(createEventRequest.getRunTime())
+				.build();
 	}
 
-	public List<EventResponse> toEventResponse(){
+	public List<EventResponse> toEventResponse() {
 		return commonEventService.findAllByOrderByCreatedAtDesc()
-			.stream()
-			.map(EventResponse::of)
-			.collect(Collectors.toList());
+				.stream()
+				.map(EventResponse::of)
+				.collect(Collectors.toList());
 	}
 
 	public EventDetail toEventDetail(UpdateEventDetailRequest updateEventDetailRequest) {
 		return EventDetail.builder()
-			.content(updateEventDetailRequest.getContent())
-			.build();
+				.content(updateEventDetailRequest.getContent())
+				.build();
 	}
 
 	public EventDetailResponse toEventDetailResponse(Group group, Event event) {
@@ -52,10 +52,10 @@ public class EventMapper {
 
 	public EventBasic toEventBasic(UpdateEventBasicRequest updateEventBasicRequest) {
 		return EventBasic.builder()
-			.name(updateEventBasicRequest.getName())
-			.runTime(updateEventBasicRequest.getRunTime())
-			.startAt(updateEventBasicRequest.getStartAt())
-			.build();
+				.name(updateEventBasicRequest.getName())
+				.runTime(updateEventBasicRequest.getRunTime())
+				.startAt(updateEventBasicRequest.getStartAt())
+				.build();
 	}
 
 

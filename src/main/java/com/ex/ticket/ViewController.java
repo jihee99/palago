@@ -36,7 +36,7 @@ public class ViewController {
 
 	@GetMapping("/api/group/event")
 	public String manager(){
-		return "test/manager";
+		return "group/event/list";
 	}
 
 	@GetMapping("/api/group/master")

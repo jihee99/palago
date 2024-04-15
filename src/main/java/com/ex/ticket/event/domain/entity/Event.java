@@ -34,7 +34,6 @@ public class Event extends BaseTimeEntity {
 
     @Embedded private EventDetail eventDetail;
 
-
     // 이벤트 상태
     @Enumerated(EnumType.STRING)
     private EventStatus status = EventStatus.PREPARING;

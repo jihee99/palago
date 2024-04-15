@@ -1,5 +1,8 @@
 package com.ex.ticket.security.config;
 
+import com.ex.ticket.security.jwt.TokenService;
+import com.ex.ticket.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,16 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-
-import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
-import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
-import com.ex.ticket.security.jwt.TokenService;
-import com.ex.ticket.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -63,25 +57,24 @@ public class SecurityConfig {
 
 
 			.authorizeHttpRequests(requests -> requests
-				.requestMatchers(allowedUrls).permitAll()
-
-				// .requestMatchers("/login/us").permitAll()
-				.requestMatchers("/api/mypage/**").hasAuthority("USER")
-				.requestMatchers("/api/group/master/**").hasAuthority("MASTER")
-				.requestMatchers("/api/group/manage/**").hasAnyAuthority("MASTER", "MANAGER")
-				.requestMatchers("/api/group/ticket/**").hasAnyAuthority("MASTER", "MANAGER")
-				.requestMatchers("/api/group/event/**").hasAnyAuthority("MASTER", "MANAGER")
-				.requestMatchers("/api/system/**").hasAuthority("ADMIN")
+//				.requestMatchers(allowedUrls).permitAll()
+//
+//				.requestMatchers("/api/mypage/**").hasAuthority("USER")
+//				.requestMatchers("/api/group/master/**").hasAuthority("MASTER")
+//				.requestMatchers("/api/group/manage/**").hasAnyAuthority("MASTER", "MANAGER")
+//				.requestMatchers("/api/group/ticket/**").hasAnyAuthority("MASTER", "MANAGER")
+//				.requestMatchers("/api/group/event/**").hasAnyAuthority("MASTER", "MANAGER")
+//				.requestMatchers("/api/system/**").hasAuthority("ADMIN")
 
 				// .anyRequest().authenticated()
 				.anyRequest().permitAll()
 			)
 
-			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
-				UsernamePasswordAuthenticationFilter.class)
-
-			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
-				BasicAuthenticationFilter.class)
+//			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
+//				UsernamePasswordAuthenticationFilter.class)
+//
+//			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
+//				BasicAuthenticationFilter.class)
 		// AuthenticationManager 을 필수로 전달해줘야함
 		;
 
