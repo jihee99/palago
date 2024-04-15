@@ -18,7 +18,7 @@ public class ViewController {
 			System.out.println(username);
 			model.addAttribute("username", username); // 모델에 사용자 이름을 추가하여 화면에 전달
 		}
-		return "test/index";
+		return "index";
 	}
 
 	@PostMapping("/token")
