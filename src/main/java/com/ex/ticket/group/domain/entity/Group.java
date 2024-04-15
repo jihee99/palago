@@ -1,5 +1,9 @@
 package com.ex.ticket.group.domain.entity;
 
+import com.ex.ticket.common.vo.GroupInfoVo;
+import com.ex.ticket.common.vo.GroupProfileVo;
+import com.ex.ticket.group.domain.dto.request.CreateGroupRequest;
+import com.ex.ticket.group.exception.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,15 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.ex.ticket.group.domain.dto.request.CreateGroupRequest;
-import com.ex.ticket.group.exception.AlreadyJoinedGroupException;
-import com.ex.ticket.group.exception.CannotModifyMasterGroupUserRoleException;
-import com.ex.ticket.group.exception.ForbiddenGroupException;
-import com.ex.ticket.group.exception.GroupUserNotFoundException;
-import com.ex.ticket.group.exception.NotAcceptedGroupException;
-import com.ex.ticket.group.exception.NotManagerGroupException;
-import com.ex.ticket.group.exception.NotMasterGroupException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -142,13 +137,13 @@ public class Group {
     }
 
 
-    // public GroupInfoVo toGroupInfoVo() {
-    //     return GroupInfoVo.from(this);
-    // }
+     public GroupInfoVo toGroupInfoVo() {
+         return GroupInfoVo.from(this);
+     }
 
-    // public GroupProfileVo toGroupProfileVo() {
-    //     return GroupProfileVo.from(this);
-    // }
+     public GroupProfileVo toGroupProfileVo() {
+         return GroupProfileVo.from(this);
+     }
 
 
     public static Group toEntity(CreateGroupRequest createGroupRequest, Long masterUserId) {

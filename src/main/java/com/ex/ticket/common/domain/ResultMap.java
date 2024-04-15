@@ -1,5 +1,6 @@
 package com.ex.ticket.common.domain;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,8 @@ import java.util.Map;
 import org.json.JSONObject;
 
 public class ResultMap extends HashMap<String, Object> {
-	
+
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	public void setSuccess() {
