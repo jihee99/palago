@@ -1,5 +1,7 @@
-package com.ex.ticket.common;
+package com.ex.ticket.common.domain;
 
+import com.ex.ticket.common.domain.BaseErrorCode;
+import com.ex.ticket.common.domain.ErrorReason;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

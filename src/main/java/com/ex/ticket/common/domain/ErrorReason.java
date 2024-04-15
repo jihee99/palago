@@ -1,4 +1,4 @@
-package com.ex.ticket.common;
+package com.ex.ticket.common.domain;
 
 import org.springframework.http.HttpStatus;
 

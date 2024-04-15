@@ -1,4 +1,4 @@
-package com.ex.ticket.common;
+package com.ex.ticket.common.domain;
 
 
 public interface BaseErrorCode {

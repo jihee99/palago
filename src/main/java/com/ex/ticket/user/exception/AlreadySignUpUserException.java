@@ -1,6 +1,6 @@
 package com.ex.ticket.user.exception;
 
-import com.ex.ticket.common.PalagoException;
+import com.ex.ticket.common.domain.PalagoException;
 
 public class AlreadySignUpUserException extends PalagoException {
 

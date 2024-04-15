@@ -1,7 +1,7 @@
 package com.ex.ticket.event.exception;
 
-import com.ex.ticket.common.BaseErrorCode;
-import com.ex.ticket.common.ErrorReason;
+import com.ex.ticket.common.domain.BaseErrorCode;
+import com.ex.ticket.common.domain.ErrorReason;
 import com.ex.ticket.common.annotation.ExplainError;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

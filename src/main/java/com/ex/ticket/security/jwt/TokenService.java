@@ -7,7 +7,6 @@ import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import com.ex.ticket.common.PalagoStatic;
-import com.ex.ticket.common.domain.dto.AccessTokenInfo;
 import com.ex.ticket.user.exception.InvalidTokenException;
 
 import io.jsonwebtoken.Claims;

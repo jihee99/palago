@@ -1,6 +1,6 @@
 package com.ex.ticket.event.exception;
 
-import com.ex.ticket.common.PalagoException;
+import com.ex.ticket.common.domain.PalagoException;
 
 public class AlreadyPreparingStatusException extends PalagoException {
 

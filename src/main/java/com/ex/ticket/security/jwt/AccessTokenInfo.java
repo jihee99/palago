@@ -1,4 +1,4 @@
-package com.ex.ticket.common.domain.dto;
+package com.ex.ticket.security.jwt;
 
 import lombok.Builder;
 import lombok.Getter;

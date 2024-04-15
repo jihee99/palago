@@ -1,6 +1,6 @@
 package com.ex.ticket.event.domain.entity;
 
-import com.ex.ticket.common.PalagoException;
+import com.ex.ticket.common.domain.PalagoException;
 import com.ex.ticket.common.domain.BaseTimeEntity;
 import com.ex.ticket.common.vo.EventBasicVo;
 import com.ex.ticket.common.vo.EventDetailVo;

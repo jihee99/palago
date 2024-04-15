@@ -5,8 +5,8 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 
-import com.ex.ticket.common.BaseErrorCode;
-import com.ex.ticket.common.ErrorReason;
+import com.ex.ticket.common.domain.BaseErrorCode;
+import com.ex.ticket.common.domain.ErrorReason;
 import com.ex.ticket.common.annotation.ExplainError;
 
 import lombok.AllArgsConstructor;
