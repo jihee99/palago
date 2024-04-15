@@ -1,11 +1,11 @@
 package com.ex.ticket;
 
-import java.security.Principal;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 public class ViewController {
@@ -30,6 +30,9 @@ public class ViewController {
 	public String user(){
 		return "test/user";
 	}
+
+	@GetMapping("/api/group")
+	public String groupHome() { return "group/home"; }
 
 	@GetMapping("/api/group/event")
 	public String manager(){
