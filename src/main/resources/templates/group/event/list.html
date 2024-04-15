@@ -383,31 +383,31 @@
 
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">신규 이벤트 등록</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="registerForm">
-                            <label for="name" class="form-label">이벤트명</label>
-                            <input type="password" id="name" name="name" class="form-control" aria-describedby="passwordHelpBlock">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">신규 이벤트 등록</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <label for="name" class="form-label">이벤트명</label>
+                        <input type="password" id="name" name="name" class="form-control" aria-describedby="passwordHelpBlock">
 
-                            <label for="datetimepicker1" class="form-label mt-3">오픈일시</label>
-                            <input id="datetimepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
+                        <label for="datetimepicker1" class="form-label mt-3">오픈일시</label>
+                        <input id="datetimepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
 
-                            <label for="runTime" class="form-label mt-3">소요시간</label>
-                            <input id="runTime" class="form-control" type="number">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
-                        <button type="button" class="btn btn-primary">등록하기</button>
-                    </div>
+                        <label for="runTime" class="form-label mt-3">소요시간</label>
+                        <input id="runTime" class="form-control" type="number">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+                    <button type="button" class="btn btn-primary" onclick="registerEvent()">등록하기</button>
                 </div>
             </div>
         </div>
+    </div>
 
     </th:block>
 

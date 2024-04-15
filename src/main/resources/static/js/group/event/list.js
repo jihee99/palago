@@ -5,15 +5,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 });
 
-// jQuery를 사용하여 datetimepicker 초기화
 $(document).ready(function(){
     $('#datetimepicker1').datetimepicker();
+
+    // 이벤트 등록 함수
+    function registerEvent(){
+        console.log("event register button click function");
+
+        let param = {
+            'name': $('#name').val(),
+            'startAt': $('#datetimepicker1').val(),
+            'runTime': $('#runTime').val()
+        };
+
+        w
+
+    }
+
+    window.registerEvent = registerEvent;
+
 });
 
-// 이벤트 등록 함수
-function registerEvent(){
-    console.log("event register button click function");
-}
 // $(() => {
 //     let $table = $('.listTbl').ajaxDataTable("/sys/company/companyList", data, {
 //         columns: [
