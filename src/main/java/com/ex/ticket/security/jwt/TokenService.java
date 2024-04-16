@@ -1,14 +1,8 @@
 package com.ex.ticket.security.jwt;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
-
-import org.springframework.stereotype.Service;
-
+import com.ex.ticket.auth.model.RefreshTokenEntity;
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.user.exception.InvalidTokenException;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -16,6 +10,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -56,6 +55,34 @@ public class TokenService {
 			.compact();
 	}
 
+	public String generateRefreshToken(String email){
+		final Date issuedAt = new Date();
+		final Date refreshTokenExpiresIn = new Date(issuedAt.getTime() + PalagoStatic.REFRESH_TOKEN_TIME);
+		final Key encodedKey = getSecretKey();
+
+		String refreshToken = Jwts.builder()
+				.setSubject(email)
+				.claim(PalagoStatic.TOKEN_TYPE, PalagoStatic.REFRESH_TOKEN)
+				.setIssuedAt(issuedAt)
+				.setExpiration(refreshTokenExpiresIn)
+				.signWith(encodedKey)
+				.compact();
+
+		// redis에 저장
+		// redisTemplate.opsForValue().set(
+		// 	email,
+		// 	refreshToken,
+		// 	jwtProperties.getRefreshExp(),
+		// 	TimeUnit.MILLISECONDS
+		// );
+
+		System.out.println("refresh token : " + refreshToken);
+		RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, refreshToken, 10L);
+//		commonRefreshTokenService.save(refreshTokenEntity);
+
+		return refreshToken;
+	}
+
 	public boolean isAccessToken(String token) {
 		return getJws(token).getBody().get(PalagoStatic.TOKEN_TYPE).equals(PalagoStatic.ACCESS_TOKEN);
 	}
@@ -87,5 +114,6 @@ public class TokenService {
 		}
 		throw InvalidTokenException.EXCEPTION;
 	}
+
 
 }

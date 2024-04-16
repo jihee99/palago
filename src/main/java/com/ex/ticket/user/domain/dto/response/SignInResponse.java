@@ -13,7 +13,10 @@ public class SignInResponse {
         @Schema(description = "회원 아이디", example = "1")
         private final Long userId;
 
-        @Schema(description = "회원 이름", example = "홍길동")
+        @Schema(description = "로그인 아이디", example = "user1@test.com")
+        private final String userName;
+
+        @Schema(description = "로그인 아이디", example = "user1@test.com")
         private final String name;
 
         @Schema(description = "회원 유형", example = "USER")

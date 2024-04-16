@@ -13,5 +13,5 @@ public class SignInRequest {
 
     @Schema(description = "회원 비밀번호", example = "1234")
     private String password;
-
+    private String refreshToken;
 }

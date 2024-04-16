@@ -1,22 +1,20 @@
 package com.ex.ticket.security.jwt;
 
-import java.io.IOException;
-
+import com.ex.ticket.auth.PrincipalDetails;
+import com.ex.ticket.common.PalagoStatic;
+import com.ex.ticket.user.domain.entity.User;
+import com.ex.ticket.user.repository.UserRepository;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.ex.ticket.auth.PrincipalDetails;
-import com.ex.ticket.common.PalagoStatic;
-import com.ex.ticket.user.domain.entity.User;
-import com.ex.ticket.user.repository.UserRepository;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -47,16 +45,21 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		// jwt 토큰을 검증해서 정상적인 사용자인지 확인
 		String jwtToken = request.getHeader(PalagoStatic.AUTH_HEADER).replace(PalagoStatic.BEARER, "");
 
+
 		AccessTokenInfo accessTokenInfo = tokenService.parseAccessToken(jwtToken);
-		System.out.println(accessTokenInfo.getEmail() + "  " + accessTokenInfo.getRole());
 
-		User user = userRepository.findByEmail(accessTokenInfo.getEmail()).orElseThrow();
-		PrincipalDetails principalDetails = new PrincipalDetails(user);
+		if(accessTokenInfo != null) {
+			System.out.println("token 있다");
+			System.out.println(accessTokenInfo.getEmail() + "  " + accessTokenInfo.getRole());
 
-		// Jwt 토큰 서명을 통해서 서명이 정상이면 authentication 객체를 만가어준다.
-		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
+			User user = userRepository.findByEmail(accessTokenInfo.getEmail()).orElseThrow();
+			PrincipalDetails principalDetails = new PrincipalDetails(user);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			// Jwt 토큰 서명을 통해서 서명이 정상이면 authentication 객체를 만들어준다.
+			Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
 
 		chain.doFilter(request, response);
 
@@ -70,11 +73,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		if (jwtHeader == null || !jwtHeader.startsWith(PalagoStatic.BEARER)) {
 			return true;
 		}
-
-		// 다음엔 얘가 access token이 맞는지 체크
-		// if (jwtHeader == null || !jwtHeader.startsWith(ACCESS_TOKEN_PREFIX)) {
-		// 	return true;
-		// }
 
 		return false;
 	}
