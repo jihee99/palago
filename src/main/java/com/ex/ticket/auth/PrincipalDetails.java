@@ -1,6 +1,5 @@
 package com.ex.ticket.auth;
 
-import com.ex.ticket.user.domain.dto.response.SignInResponse;
 import com.ex.ticket.user.domain.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,16 +30,6 @@ public class PrincipalDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		return user.getEmail();
-	}
-
-
-	public SignInResponse getSignInResponse(){
-		return SignInResponse.builder()
-				.userId(user.getUserId())
-				.userName(user.getEmail())
-				.name(user.getName())
-				.role(user.getAccountRole())
-			.build();
 	}
 
 	@Override

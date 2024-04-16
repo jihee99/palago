@@ -27,14 +27,14 @@ function submitForm() {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     // 요청 완료 후 실행될 콜백 함수 설정
-    // xhr.onload = function() {
-    //     if (xhr.status === 200) {
-    //         alert("로그인 성공!");
-    //         // window.location.href = "/api/group";
-    //     } else {
-    //         alert("로그인 실패!");
-    //     }
-    // };
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert("로그인 성공!");
+            window.location.href = "/api/group";
+        } else {
+            alert("로그인 실패!");
+        }
+    };
 
     // 요청 전송
     xhr.send(jsonData);

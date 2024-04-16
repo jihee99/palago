@@ -1,9 +1,11 @@
 package com.ex.ticket.security.jwt;
 
 import com.ex.ticket.auth.PrincipalDetails;
+import com.ex.ticket.auth.model.dto.TokenAndUserResponse;
 import com.ex.ticket.common.PalagoStatic;
-import com.ex.ticket.security.handler.CustomAuthenticationSuccessHandler;
+import com.ex.ticket.security.CookieHelper;
 import com.ex.ticket.user.domain.dto.request.SignInRequest;
+import com.ex.ticket.user.domain.entity.User;
 import com.ex.ticket.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -13,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +25,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +36,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final UserRepository userRepository;
 
-	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+//	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+	private final CookieHelper cookieHelper;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -83,11 +90,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		IOException {
 
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-		// System.out.println(principalDetails.getUsername());
-		// String authoritiesAsString = principalDetails.getAuthorities().stream()
-		// 	.map(GrantedAuthority::getAuthority)
-		// 	.collect(Collectors.joining(", "));
-		// System.out.println("Authorities: " + authoritiesAsString);
+
+		System.out.println(principalDetails.getUsername());
+		User loginUser = userRepository.findById(principalDetails.getUserId()).orElseThrow();
 
 		String grantedAuthority = authResult.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
@@ -95,15 +100,29 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			.orElseThrow()
 			.toString();
 
-		log.info("{} {}", ((PrincipalDetails)authResult.getPrincipal()).getUsername(), grantedAuthority);
-//			 String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
+//		String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
 
 		String access = tokenService.generateAccessToken(principalDetails.getUsername(), grantedAuthority);
-		// refresh 만들어서 추가하기
+		String refresh = tokenService.generateRefreshToken(principalDetails.getUsername());
+
+		TokenAndUserResponse tokenAndUserResponse = TokenAndUserResponse.builder()
+				.user(loginUser)
+				.accessToken(access)
+				.accessTokenAge(tokenService.getAccessTokenTTlSecond())
+				.refreshTokenAge(tokenService.getRefreshTokenTTlSecond())
+				.refreshToken(refresh)
+				.build();
+		// 쿠키 생성 및 HTTP 헤더에 추가
+		Map<String, ResponseCookie> cookies = cookieHelper.getTokenCookies(tokenAndUserResponse);
 		response.addHeader(PalagoStatic.AUTH_HEADER, PalagoStatic.BEARER + access);
+
+		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.ACCESS_TOKEN).toString());
+		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.REFRESH_TOKEN).toString());
+
+		response.sendRedirect("/api/group/event");
 		System.out.println("---success authentication---");
 
-		customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
+//		customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
 //			this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 	}
 

@@ -1,22 +1,18 @@
 package com.ex.ticket.security.filter;
 
-import java.io.IOException;
-
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class MyFilter1 implements Filter {
+import java.io.IOException;
+
+public class MyFilter1 extends OncePerRequestFilter {
+	
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
-		IOException,
-		ServletException {
-
-		System.out.println("filter 1");
-		chain.doFilter(request, response);
-
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		System.out.println("이걸 로그인 전에 타게 할 수 있을까");
 	}
 }

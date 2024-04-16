@@ -4,9 +4,6 @@ import com.ex.ticket.auth.PrincipalDetails;
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.security.CookieHelper;
 import com.ex.ticket.security.jwt.TokenService;
-import com.ex.ticket.user.domain.dto.response.SignInResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,18 +51,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             System.out.println("아님");
         }
 
-
     }
 
-
-    private byte[] getSignInResponse(PrincipalDetails principalDetails) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        SignInResponse signInResponse = principalDetails.getSignInResponse();
-
-        System.out.println("getSignInResponse 동작 중");
-        log.info("{} {} {} {}", signInResponse.getUserId(), signInResponse.getUserName(), signInResponse.getName(), signInResponse.getRole());
-
-        return objectMapper.writeValueAsBytes(signInResponse);
-    }
 
 }

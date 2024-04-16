@@ -91,7 +91,7 @@ public class TokenService {
 		return getJws(token).getBody().get(PalagoStatic.TOKEN_TYPE).equals(PalagoStatic.REFRESH_TOKEN);
 	}
 
-// 	public AccessTokenInfo parseAccessTㅈoken(String token) {
+// 	public AccessTokenInfo parseAccessToken(String token) {
 // 		if (isAccessToken(token)) {
 // 			Claims claims = getJws(token).getBody();
 // 			return AccessTokenInfo.builder()
@@ -115,5 +115,12 @@ public class TokenService {
 		throw InvalidTokenException.EXCEPTION;
 	}
 
+	public Long getAccessTokenTTlSecond() {
+		return PalagoStatic.ACCESS_TOKEN_TIME;
+	}
+
+	public Long getRefreshTokenTTlSecond() {
+		return PalagoStatic.REFRESH_TOKEN_TIME;
+	}
 
 }

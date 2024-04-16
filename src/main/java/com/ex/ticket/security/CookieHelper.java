@@ -1,16 +1,20 @@
 package com.ex.ticket.security;
 
 import com.ex.ticket.auth.model.dto.TokenAndUserResponse;
+import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.common.annotation.Helper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Helper
 @RequiredArgsConstructor
 public class CookieHelper {
 
-    public HttpHeaders getTokenCookies(TokenAndUserResponse tokenAndUserResponse) {
+    public Map<String, ResponseCookie> getTokenCookies(TokenAndUserResponse tokenAndUserResponse) {
         String sameSite = "None";
         ResponseCookie accessToken =
                 ResponseCookie.from("accessToken", tokenAndUserResponse.getAccessToken())
@@ -30,11 +34,17 @@ public class CookieHelper {
                         .secure(true)
                         .build();
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, accessToken.toString());
-        httpHeaders.add(HttpHeaders.SET_COOKIE, refreshToken.toString());
+        Map<String, ResponseCookie > result = new HashMap<>();
 
-        return httpHeaders;
+        result.put(PalagoStatic.ACCESS_TOKEN, accessToken);
+        result.put(PalagoStatic.REFRESH_TOKEN, refreshToken);
+
+        return result;
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(HttpHeaders.SET_COOKIE, accessToken.toString());
+//        httpHeaders.add(HttpHeaders.SET_COOKIE, refreshToken.toString());
+
+//        return httpHeaders;
     }
 
     public HttpHeaders deleteCookies() {
