@@ -76,10 +76,6 @@ public class TokenService {
 		// 	TimeUnit.MILLISECONDS
 		// );
 
-		System.out.println("refresh token : " + refreshToken);
-		RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, refreshToken, 10L);
-//		commonRefreshTokenService.save(refreshTokenEntity);
-
 		return refreshToken;
 	}
 

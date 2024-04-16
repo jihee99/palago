@@ -33,11 +33,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final AuthenticationManager authenticationManager;
 	private final TokenService tokenService;
-
 	private final UserRepository userRepository;
-
-//	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
 	private final CookieHelper cookieHelper;
 
 	@Override
@@ -68,7 +64,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			// throw new RuntimeException(e);
 			return super.attemptAuthentication(request, response);
 		}
 
@@ -90,8 +85,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		IOException {
 
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-
-		System.out.println(principalDetails.getUsername());
 		User loginUser = userRepository.findById(principalDetails.getUserId()).orElseThrow();
 
 		String grantedAuthority = authResult.getAuthorities().stream()
@@ -99,8 +92,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			.findAny()
 			.orElseThrow()
 			.toString();
-
-//		String access = tokenService.generateAccessToken(authResult.getPrincipal().toString(), grantedAuthority);
 
 		String access = tokenService.generateAccessToken(principalDetails.getUsername(), grantedAuthority);
 		String refresh = tokenService.generateRefreshToken(principalDetails.getUsername());
@@ -112,6 +103,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.refreshTokenAge(tokenService.getRefreshTokenTTlSecond())
 				.refreshToken(refresh)
 				.build();
+
 		// 쿠키 생성 및 HTTP 헤더에 추가
 		Map<String, ResponseCookie> cookies = cookieHelper.getTokenCookies(tokenAndUserResponse);
 		response.addHeader(PalagoStatic.AUTH_HEADER, PalagoStatic.BEARER + access);
@@ -119,7 +111,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.ACCESS_TOKEN).toString());
 		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.REFRESH_TOKEN).toString());
 
-		response.sendRedirect("/api/group/event");
 		System.out.println("---success authentication---");
 
 //		customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
