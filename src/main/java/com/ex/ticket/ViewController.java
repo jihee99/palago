@@ -3,6 +3,7 @@ package com.ex.ticket;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -33,12 +34,19 @@ public class ViewController {
 	}
 
 	@GetMapping("/api/group")
-	public String groupHome() { return "group/home"; }
+	public String managerHome() { return "group/home"; }
 
-	@GetMapping("/api/group/event")
-	public String manager(){
+	@GetMapping("/api/group/{groupId}")
+	public String groupHomeByGroupId(
+			@PathVariable(name = "groupId") String groupId,
+			Model model
+	){
+		System.out.println(groupId);
+		model.addAttribute("groupId", groupId);
+		// TODO 디테일 info 로 변경하기
 		return "group/event/list";
 	}
+
 
 	@GetMapping("/api/group/master")
 	public String master(){

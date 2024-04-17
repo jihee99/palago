@@ -19,7 +19,7 @@
                                     <h5 class="fw-bold" value="${item.groupId}">${item.name}</h5>
                                     <span>${item.introduce}</span>
                                 </p>
-                                <a href="#">바로가기</a>
+                                <a href="/api/group/${item.groupId}">바로가기</a>
                             </div>
                         </div>`;
                 });
