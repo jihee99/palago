@@ -21,6 +21,7 @@ public class ReadGroupsUseCase {
     @Transactional(readOnly = true)
     public List<GroupProfileResponse> execute() {
         final User user = userUtils.getCurrentUser();
+
         final Long userId = user.getUserId();
 
         return groupService.findAllByGroupUsers_UserId(userId)

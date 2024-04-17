@@ -35,6 +35,10 @@ public class GroupController {
 	@Operation(summary = "내가 속한 그룹 리스트를 가져옵니다.")
 	@GetMapping
 	public List<GroupProfileResponse> getAllGroups() {
+
+
+		List<GroupProfileResponse> list = readGroupsUseCase.execute();
+		log.info("{}", list.stream().toList());
 		return readGroupsUseCase.execute();
 	}
 

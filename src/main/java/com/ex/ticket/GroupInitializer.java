@@ -32,9 +32,11 @@ public class GroupInitializer implements ApplicationRunner {
 		   .masterUserId(3L)
 		   .build();
 
+
 		groupRepository.save(group);
 		final GroupUser masterGroupUser = toMasterGroupUser(group, 3L);
 		group.addGroupUsers(Set.of(masterGroupUser));
+		group.getGroupUsers().forEach(GroupUser::activate);
 		groupRepository.save(group);
 
 	}

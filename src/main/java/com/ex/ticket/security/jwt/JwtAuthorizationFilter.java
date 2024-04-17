@@ -56,6 +56,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 		if (token != null) {
 			System.out.println("token 있다");
+			System.out.println(token);
 
 			Authentication authentication = getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -96,8 +97,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		// 쿠키방식 지원
 		Cookie accessTokenCookie = WebUtils.getCookie(request, "accessToken");
 		if (accessTokenCookie != null) {
+			System.out.println(accessTokenCookie.getValue());
 			return accessTokenCookie.getValue();
 		}
+
 		// 기존 jwt 방식 지원
 		String rawHeader = request.getHeader(PalagoStatic.AUTH_HEADER);
 
@@ -114,7 +117,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 		User user = userRepository.findByEmail(accessTokenInfo.getEmail()).orElseThrow();
 		UserDetails userDetails = new PrincipalDetails(user);
-
+		System.out.println(userDetails.getUsername() + " " + userDetails.getAuthorities());
 		return new UsernamePasswordAuthenticationToken(
 				userDetails, "user", userDetails.getAuthorities());
 	}
