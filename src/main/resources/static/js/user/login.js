@@ -30,8 +30,8 @@ function submitForm() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             alert("로그인 성공!");
-            // window.location.href = "/home";
-            window.location.href = "/api/group";
+            window.location.href = "/home";
+            // window.location.href = "/api/group";
         } else {
             alert("로그인 실패!");
         }

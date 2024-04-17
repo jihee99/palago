@@ -16,7 +16,7 @@ public class RejectGroupUseCase {
 	private final UserUtils userUtils;
 
 	public GroupDetailResponse execute(Long groupId) {
-		final Long userId = userUtils.getCurrentMemberId();
+		final Long userId = userUtils.getCurrentUserId();
 		final Group group = commonGroupService.findById(groupId);
 
 		return commonGroupService.toGroupDetailResponseExecute(groupService.removeGroupUser(group, userId));

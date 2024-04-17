@@ -1,37 +1,20 @@
 package com.ex.ticket.group.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ex.ticket.common.vo.UserProfileVo;
-import com.ex.ticket.group.domain.dto.request.CreateGroupRequest;
 import com.ex.ticket.group.domain.dto.request.UpdateGroupRequest;
 import com.ex.ticket.group.domain.dto.response.GroupDetailResponse;
 import com.ex.ticket.group.domain.dto.response.GroupEventProfileResponse;
 import com.ex.ticket.group.domain.dto.response.GroupProfileResponse;
-import com.ex.ticket.group.domain.dto.response.GroupResponse;
-import com.ex.ticket.group.service.CreateGroupUseCase;
-import com.ex.ticket.group.service.JoinGroupUseCase;
-import com.ex.ticket.group.service.ReadGroupEventUseCase;
-import com.ex.ticket.group.service.ReadGroupUseCase;
-import com.ex.ticket.group.service.ReadGroupsUseCase;
-import com.ex.ticket.group.service.ReadInviteUsersUseCase;
-import com.ex.ticket.group.service.RejectGroupUseCase;
-import com.ex.ticket.group.service.UpdateGroupProfileUseCase;
-
+import com.ex.ticket.group.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Tag(name = "2. 그룹관리 API(매니저용)")
@@ -51,13 +34,13 @@ public class GroupController {
 
 	@Operation(summary = "내가 속한 그룹 리스트를 가져옵니다.")
 	@GetMapping
-	public List<GroupProfileResponse> getAllHosts() {
+	public List<GroupProfileResponse> getAllGroups() {
 		return readGroupsUseCase.execute();
 	}
 
 	@Operation(summary = "고유 아이디에 해당하는 그룹 정보를 가져옵니다.")
 	@GetMapping("/{groupId}")
-	public GroupDetailResponse getHostById(@PathVariable Long groupId) {
+	public GroupDetailResponse getGroupById(@PathVariable Long groupId) {
 		return readGroupUseCase.execute(groupId);
 	}
 

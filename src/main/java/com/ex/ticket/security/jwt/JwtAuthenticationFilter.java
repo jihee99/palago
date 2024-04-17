@@ -46,8 +46,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// 1. username, password 받기
 			SignInRequest signInRequest = getSignInRequest(request.getInputStream());
 
-			// ** refreshToken 이 없다면? 추가 하기
-
 			// username, password 를 통해서 인증 객체 생성
 			// 2. 로그인 시도 > authenticationManager 로 로그인 시도 > PrincipalDetailsService 호출 후 loadByUsername 자동 호출
 			UsernamePasswordAuthenticationToken authenticationToken = createUsernamePasswordAuthenticationToken(signInRequest);

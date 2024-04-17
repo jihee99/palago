@@ -22,7 +22,7 @@ public class ReadEventDetailUseCase {
 	public EventDetailResponse execute(Long eventId) {
 		final Event event = commonEventService.findById(eventId);
 		final Group group = commonGroupService.findById(event.getGroupId());
-		final Long userId = userUtils.getCurrentMemberId();
+		final Long userId = userUtils.getCurrentUserId();
 		// 호스트 유저가 아닐 경우 준비 상태일 때 조회할 수 없음
 		if (event.isPreparing() && !group.isActiveGroupUserId(userId)) {
 			throw EventNotOpenException.EXCEPTION;

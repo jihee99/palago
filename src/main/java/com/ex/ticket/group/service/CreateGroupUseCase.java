@@ -25,7 +25,7 @@ public class CreateGroupUseCase {
 	@Transactional
 	public GroupResponse execute(CreateGroupRequest createGroupRequest) {
 		// 존재하는 유저인지 검증
-		final User user = userUtils.getCurrentMember();
+		final User user = userUtils.getCurrentUser();
 		final Long id = user.getUserId();
 		// 호스트 생성
 		final Group group = groupService.createGroup( Group.toEntity(createGroupRequest, id));

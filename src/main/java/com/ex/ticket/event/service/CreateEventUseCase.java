@@ -19,7 +19,7 @@ public class CreateEventUseCase {
     private final EventMapper eventMapper;
 
     public EventResponse execute(CreateEventRequest createEventRequest) {
-        final Long userId = userUtils.getCurrentMemberId();
+        final Long userId = userUtils.getCurrentUserId();
         System.out.println(userId);
         final Group group  = groupService.findAllByMasterUserId(userId);
         createEventRequest.setGroupId(group.getId());

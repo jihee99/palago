@@ -1,6 +1,7 @@
 package com.ex.ticket.security.jwt;
 
-import com.ex.ticket.auth.model.RefreshTokenEntity;
+import com.ex.ticket.auth.exception.ExpiredTokenException;
+import com.ex.ticket.auth.exception.RefreshTokenExpiredException;
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.user.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
@@ -107,6 +108,18 @@ public class TokenService {
 				.email(claims.getSubject())
 				.role((String) claims.get(PalagoStatic.TOKEN_ROLE))
 				.build();
+		}
+		throw InvalidTokenException.EXCEPTION;
+	}
+
+	public Long parseRefreshToken(String token) {
+		try {
+			if (isRefreshToken(token)) {
+				Claims claims = getJws(token).getBody();
+				return Long.parseLong(claims.getSubject());
+			}
+		} catch (ExpiredTokenException e) {
+			throw RefreshTokenExpiredException.EXCEPTION;
 		}
 		throw InvalidTokenException.EXCEPTION;
 	}

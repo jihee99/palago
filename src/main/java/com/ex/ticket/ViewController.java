@@ -21,6 +21,7 @@ public class ViewController {
 		return "index";
 	}
 
+
 	@PostMapping("/token")
 	public String token(){
 		return "test/token";
@@ -50,6 +51,11 @@ public class ViewController {
 	@GetMapping("/login/us")
 	public String loginForm(){
 		return "user/loginForm";
+	}
+
+	@GetMapping("/login/group")
+	public String managerLoginForm(){
+		return "group/login";
 	}
 
 	@GetMapping("/join/us")

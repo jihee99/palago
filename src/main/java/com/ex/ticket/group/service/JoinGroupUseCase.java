@@ -22,8 +22,8 @@ public class JoinGroupUseCase {
 
 	@Transactional
 	public GroupDetailResponse execute(Long groupId) {
-		final Long userId = userUtils.getCurrentMemberId();
-		final User user = userUtils.getCurrentMember();
+		final Long userId = userUtils.getCurrentUserId();
+		final User user = userUtils.getCurrentUser();
 		final Group group = commonGroupService.findById(groupId);
 
 		user.updateAccountRole(AccountRole.MANAGER);

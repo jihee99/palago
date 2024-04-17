@@ -23,9 +23,13 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	// 권한이나 인증이 필요한 특정 주소를 요청했을 때 authorization filter 타게 되어있음
 
+//	경우 1. Access Token , Refresh Token 모두 만료 -> 에러, 재로그인 요청
+//	경우2. Access Token 만료, Refresh Token 유효 -> Refresh Token 검증하여 (서버 DB에 저장되어 토큰과 클라이언트에 저장되어있는 토큰을 비요하여) Access Token 발급
+//	경우3. Access Token 유효, Refresh Token 만료 -> Access Token 검증하여 Refresh Token 재발급(access token이 유효하다 ==이미 인증되었다 -> 바로 refresh token 재발급)
+//	경우4. Access Token , Refresh Token 모두 유효 -> 정상처리
+
 	private final TokenService tokenService;
 	private final UserRepository userRepository;
-
 	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, TokenService tokenService, UserRepository userRepository) {
 		super(authenticationManager);
 		this.tokenService = tokenService;

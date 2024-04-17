@@ -1,19 +1,17 @@
 package com.ex.ticket.common.util;
 
-import java.util.List;
-
+import com.ex.ticket.user.domain.entity.User;
+import com.ex.ticket.user.exception.SecurityContextNotFoundException;
+import com.ex.ticket.user.exception.UserNotFoundException;
+import com.ex.ticket.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.ex.ticket.user.domain.entity.User;
-import com.ex.ticket.user.exception.SecurityContextNotFoundException;
-import com.ex.ticket.user.exception.UserNotFoundException;
-import com.ex.ticket.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class UserUtils {
 	private static List<SimpleGrantedAuthority> notUserAuthority = List.of(anonymous, swagger);
 	private final UserRepository userRepository;
 
-	public Long getCurrentMemberId(){
+	public Long getCurrentUserId(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {
@@ -41,8 +39,8 @@ public class UserUtils {
 		return 0L;
 	}
 
-	public User getCurrentMember(){
-		return userRepository.findById(getCurrentMemberId()).orElseThrow(() -> UserNotFoundException.EXCEPTION);
+	public User getCurrentUser(){
+		return userRepository.findById(getCurrentUserId()).orElseThrow(() -> UserNotFoundException.EXCEPTION);
 	}
 
 }

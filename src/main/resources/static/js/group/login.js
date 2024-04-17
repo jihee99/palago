@@ -10,7 +10,6 @@ function submitForm() {
         return;
     }
 
-
     let formData = new FormData(form);
 
     let param = {};
@@ -28,9 +27,11 @@ function submitForm() {
 
     // 요청 완료 후 실행될 콜백 함수 설정
     xhr.onload = function() {
+        console.log(xhr);
         if (xhr.status === 200) {
             alert("로그인 성공!");
-            // window.location.href = "/home";
+            // console.log(xhr);
+            window.location.href = "/api/group";
         } else {
             alert("로그인 실패!");
         }
