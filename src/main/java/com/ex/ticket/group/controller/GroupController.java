@@ -36,7 +36,6 @@ public class GroupController {
 	@GetMapping
 	public List<GroupProfileResponse> getAllGroups() {
 
-
 		List<GroupProfileResponse> list = readGroupsUseCase.execute();
 		log.info("{}", list.stream().toList());
 		return readGroupsUseCase.execute();
@@ -78,10 +77,13 @@ public class GroupController {
 		return updateGroupProfileUseCase.execute(groupId, updateGroupRequest);
 	}
 
-	// TODO 이벤트 리스트 조회 서비스 생성하기
 	@Operation(summary = "해당 그룹에서 관리중인 이벤트 리스트를 가져옵니다.")
 	@GetMapping("/{groupId}/events")
-	public List<GroupEventProfileResponse> getHostEventsById (@PathVariable Long groupId) {
+	public List<GroupEventProfileResponse> getHostEventsById (
+		@PathVariable(name = "groupId") Long groupId
+	) {
+			System.out.println("============getHostEventsById============");
+			System.out.println(groupId);
 		return readGroupEventsUseCase.execute(groupId);
 	}
 

@@ -3,7 +3,6 @@ package com.ex.ticket;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -28,6 +27,15 @@ public class ViewController {
 		return "test/token";
 	}
 
+	@GetMapping("/login/group")
+	public String managerLoginForm(){
+		return "group/login";
+	}
+
+	@GetMapping("/join/us")
+	public String joinForm() { return "user/joinForm"; }
+
+
 	@GetMapping("/api/mypage")
 	public String user(){
 		return "test/user";
@@ -36,16 +44,27 @@ public class ViewController {
 	@GetMapping("/api/group")
 	public String managerHome() { return "group/home"; }
 
-	@GetMapping("/api/group/{groupId}")
-	public String groupHomeByGroupId(
-			@PathVariable(name = "groupId") String groupId,
-			Model model
-	){
-		System.out.println(groupId);
-		model.addAttribute("groupId", groupId);
-		// TODO 디테일 info 로 변경하기
-		return "group/event/list";
-	}
+//	@GetMapping("/api/group/{groupId}")
+//	public String groupHomeByGroupId(
+//			@PathVariable(name = "groupId") String groupId,
+//			Model model
+//	){
+//		System.out.println(groupId);
+//		model.addAttribute("groupId", groupId);
+//		// TODO 디테일 info 로 변경하기
+//		return "group/event/list";
+//	}
+
+//	@GetMapping("/api/group/{groupId}/event")
+//	public String manageEvent(
+//			@PathVariable(name = "groupId") String groupId,
+//			Model model
+//	){
+//		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//		System.out.println(groupId);
+//		model.addAttribute("groupId", groupId);
+//		return "group/event/list";
+//	}
 
 
 	@GetMapping("/api/group/master")
@@ -60,14 +79,6 @@ public class ViewController {
 	public String loginForm(){
 		return "user/loginForm";
 	}
-
-	@GetMapping("/login/group")
-	public String managerLoginForm(){
-		return "group/login";
-	}
-
-	@GetMapping("/join/us")
-	public String joinForm() { return "user/joinForm"; }
 
 
 }

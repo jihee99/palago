@@ -12,6 +12,8 @@ public class OpenEventUseCase {
 	private final CommonEventService commonEventService;
 
 	public EventResponse execute(Long eventId) {
+
+		System.out.println("==============오픈할거임============");
 		final Event event = commonEventService.findById(eventId);
 		return EventResponse.of(eventService.openEvent(event));
 	}

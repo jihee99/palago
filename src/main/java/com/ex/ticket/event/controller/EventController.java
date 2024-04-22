@@ -18,7 +18,7 @@ import java.util.List;
 // @SecurityRequirement(name = "access-token")
 @RestController
 @Tag(name = "3. 이벤트 관련 API (사용자용)")
-@RequestMapping("/api/v1/events")
+@RequestMapping("/api/group/{groupId}")
 @RequiredArgsConstructor
 public class EventController {
 
@@ -28,7 +28,9 @@ public class EventController {
 
 	@Operation(summary = "전시를 최신순으로 가져옵니다.")
 	@GetMapping("/list")
-	public List<EventResponse> getAllOpenEventByUser() {
+	public List<EventResponse> getAllOpenEventByUser(
+			@PathVariable(name = "groupId") String groupId
+	) {
 		return readEventsUseCase.execute();
 	}
 
@@ -37,7 +39,6 @@ public class EventController {
 	public EventDetailResponse getEventDetailById(@PathVariable Long eventId) {
 		return readEventDetailUseCase.execute(eventId);
 	}
-
 
 	// @Operation(summary = "전시 제목을 키워드로 검색하여 최신순으로 가져옵니다.")
 	// @GetMapping("/search")
