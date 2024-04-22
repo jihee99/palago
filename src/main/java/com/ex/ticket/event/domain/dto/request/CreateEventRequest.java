@@ -34,7 +34,7 @@ public class CreateEventRequest {
 		description = "전시 시작 시각")
 	@NotNull(message = "전시 시작일을 입력하세요.")
 	@Future(message = "전시 시작일은 현재보다 이후여야 합니다.")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm", timezone = "Asia/Seoul")
 	private LocalDateTime startAt;
 
 	@Schema(defaultValue = "30", description = "소요시간")
