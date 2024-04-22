@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-	List<Event> findAllByGroupId(Long groupId);
+	List<Event> findAllByGroupIdOrderByCreatedAt(Long groupId);
 
 	List<Event> findAllByGroupIdIn(List<Long> groupId);
 

@@ -41,6 +41,8 @@ public class GroupEventController {
 	public EventResponse updateEventBasic(
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventBasicRequest updateEventBasicRequest) {
+
+		System.out.println("=========전시 기본 정보 수정 ===========");
 		return updateEventBasicUseCase.execute(eventId, updateEventBasicRequest);
 	}
 
@@ -49,6 +51,7 @@ public class GroupEventController {
 	public EventResponse updateEventDetail(
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventDetailRequest updateEventDetailRequest) {
+		System.out.println("=========전시 상세 정보 수정 ===========");
 		return updateEventDetailUseCase.execute(eventId, updateEventDetailRequest);
 	}
 

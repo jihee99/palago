@@ -27,7 +27,7 @@
 $(document).ready(function(){
 
     const $groupId = document.getElementById('groupIdContainer').getAttribute('data-group-id');
-    let ajaxURL = `/api/group/manage/${$groupId}/events`;
+    let ajaxURL = `/api/group/${$groupId}/list`;
 
     let table = new Tabulator('#event-div', {
         layout: "fitDataStretch",
@@ -35,25 +35,11 @@ $(document).ready(function(){
         pagination: "local",
         paginationSize: 10,
         index: "eventId",
-        ajaxURL: `/api/group/manage/${$groupId}/events`,
+        ajaxURL: ajaxURL,
         ajaxResponse: function(url, params, response) {
             // Log the response data to the console
             console.log('AJAX Response:', response);
             return response;
-        },
-        rowClick: function(e, row) {
-            const rowData = row.getData();
-            console.log("Row clicked:", rowData);
-
-            // Populate the form fields with the retrieved data
-            $('#modifyForm input[name="name"]').val(rowData.name);
-            $('#modifyForm input[name="content"]').val(rowData.content);
-            $('#modifyForm input[name="startAt"]').val(formatDate(rowData.startAt, true));  // Assuming you have a function to format date/time
-            $('#modifyForm input[name="endAt"]').val(formatDate(rowData.endAt, true)); // Assuming you have a function to format date/time
-            $('#modifyForm input[name="runTime"]').val(rowData.runTime);
-            $('#modifyForm select[name="status"]').val(rowData.status);
-
-            $('#modify-modal').modal('show');
         },
         columns: [
             {title: "No.", field: "eventId"},
@@ -61,7 +47,7 @@ $(document).ready(function(){
             {title: "시작일시", field: "startAt", minWidth: 200, formatter: dateTimeFormatter},
             {title: "종료일시", field: "endAt", minWidth: 200, formatter: dateTimeFormatter},
             {title: "진행시간", field: "runTime", minWidth: 200},
-            {title: "오픈여부", field: "status", minWidth: 200},
+            {title: "오픈여부", field: "status", minWidth: 180},
             {title: "", minWidth: 100, maxWidth: 120,  formatter:(cell, formatterParams, onRendered) => {
                 const rowData = cell.getRow().getData();
 
@@ -82,7 +68,6 @@ $(document).ready(function(){
                             // 요청이 성공했을 때의 동작을 정의합니다.
                             console.log("요청이 성공했습니다.");
                             console.log("서버로부터의 응답: ", response);
-                            table.setData();
                         },
                         error: function(xhr, status, error){
                             // 요청이 실패했을 때의 동작을 정의합니다.
@@ -105,15 +90,14 @@ $(document).ready(function(){
                     console.log("row:", row);
                     console.log("Detail button clicked for row:", rowData);
 
-                    $('#modifyForm input[name="name"]').val(rowData.name);
-                    $('#modifyForm input[name="content"]').val(rowData.content);
-                    $('#modifyForm input[name="startAt"]').val(formatDate(rowData.startAt, true));  // Assuming you have a function to format date/time
-                    $('#modifyForm input[name="endAt"]').val(formatDate(rowData.endAt, true)); // Assuming you have a function to format date/time
-                    $('#modifyForm input[name="runTime"]').val(rowData.runTime);
-                    $('#modifyForm select[name="status"]').val(rowData.status);
+                    $('#modify-form input[name="name"]').val(rowData.name);
+                    $('#modify-form input[name="content"]').val(rowData.content);
+                    $('#modify-form input[name="startAt"]').val(formatDate(rowData.startAt, false));  // Assuming you have a function to format date/time
+                    $('#modify-form input[name="runTime"]').val(rowData.runTime);
+                    $('#modify-form select[name="status"]').val(rowData.status);
 
-                    $('#modify-modal').modal('show');
-
+                    // $('#modify-modal').modal('show');
+                    $('#modify-modal').data('eventId', rowData.eventId).modal('show');
                 });
                 return button;
             }},
@@ -135,13 +119,15 @@ $(document).ready(function(){
     });
 
     $('#datetimepicker1').datetimepicker({
-        format:'Y-m-d H:i',
-        minDate: new Date()
+        format: 'Y.m.d H:i',
+        minDate: new Date(),
     });
-    $('#datetimepicker2').datetimepicker({
-        format:'Y-m-d H:i',
-        minDate: new Date()
+
+    $('#modify-datepicker1').datetimepicker({
+        format: 'Y.m.d H:i',
+        minDate: new Date(),
     });
+
 
     // 이벤트 등록 함수
     function registerEvent(){
@@ -150,7 +136,6 @@ $(document).ready(function(){
         let param = {
             'name': $('#name').val(),
             'startAt': $('#datetimepicker1').val(),
-            'endAt': $('#datetimepicker2').val(),
             'runTime': $('#runTime').val()
         };
 
@@ -158,11 +143,14 @@ $(document).ready(function(){
             type: "POST",
             url: "/api/group/event/register",
             contentType: "application/json",
-            data: JSON.stringify(param), // param 객체를 JSON 문자열로 변환하여 전송합니다.
+            data: JSON.stringify(param), // param 객체를 JSON 문자열로 변환하여 전송
             success: function(response){
-                // 요청이 성공했을 때의 동작을 정의합니다.
                 console.log("요청이 성공했습니다.");
                 console.log("서버로부터의 응답: ", response);
+
+                $('#register-modal').modal('close');
+                $('#register-form').reset();
+                reloadData();
             },
             error: function(xhr, status, error){
                 // 요청이 실패했을 때의 동작을 정의합니다.
@@ -172,30 +160,124 @@ $(document).ready(function(){
         });
     }
 
-    function detailButtonFormatter(cell, formatterParams, onRendered) {
-        let button = document.createElement("button");
-        button.textContent = "오픈";
-        button.className = "detail-button btn btn-sm btn-primary";
+    /* 이벤트 수정 함수 */
+    function modifyEvent(){
+        console.log("event modify button click function");
 
-        button.addEventListener("click", function() {
-            const row = cell.getRow();
-            const rowData = cell.getRow().getData();
-            console.log("row:", row);
-            console.log("Detail button clicked for row:", rowData);
+        const eventId = $('#modify-modal').data('eventId');
 
-            $('#modifyForm input[name="name"]').val(rowData.name);
-            $('#modifyForm input[name="content"]').val(rowData.content);
-            $('#modifyForm input[name="startAt"]').val(formatDate(rowData.startAt, true));  // Assuming you have a function to format date/time
-            $('#modifyForm input[name="endAt"]').val(formatDate(rowData.endAt, true)); // Assuming you have a function to format date/time
-            $('#modifyForm input[name="runTime"]').val(rowData.runTime);
-            $('#modifyForm select[name="status"]').val(rowData.status);
-
-            $('#modify-modal').modal('show');
-
+        let formData = $('#modify-form').serializeArray();
+        let param = {};
+        formData.forEach(function(item) {
+            param[item.name] = item.value;
         });
 
-        return button;
+        console.log(param);
+
+        let api1 = $.ajax({
+            type: "POST",
+            url: `/api/group/event/${eventId}/basic`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                // 성공했을 때의 동작을 정의합니다.
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+            },
+            error: function(xhr, status, error) {
+                // 실패했을 때의 동작을 정의합니다.
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+            }
+        });
+
+        let api2 = $.ajax({
+            type: "POST",
+            url: `/api/group/event/${eventId}/details`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                // 성공했을 때의 동작을 정의합니다.
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+            },
+            error: function(xhr, status, error) {
+                // 실패했을 때의 동작을 정의합니다.
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+            }
+        });
+
+        $.when(api1, api2)
+            .then(function(response1, response2) {
+
+            // 첫 번째 AJAX 요청의 결과(response1)와 두 번째 AJAX 요청의 결과(response2)를 사용하여 작업 수행
+            console.log("모든 요청이 성공적으로 완료되었습니다.");
+            console.log("첫 번째 요청 결과: ", response1);
+            console.log("두 번째 요청 결과: ", response2);
+
+            $('#modify-modal').modal('hide');
+            $('#modify-form').reset();
+            alert("success")
+            reloadData();
+
+            }).fail(function(xhr, status, error){
+                // 하나 이상의 AJAX 요청이 실패한 경우에 대한 처리
+                console.error("하나 이상의 요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+
+                console.log(xhr.responseText);
+                let errorResponse = JSON.parse(xhr.responseText);
+                let errorMessage = errorResponse.errors[0].defaultMessage;
+                console.log(errorMessage);
+
+                alert(errorMessage);
+
+            });
+
     }
+
+    function reloadData() {
+        // AJAX 요청을 보내어 새로운 데이터를 가져옵니다.
+        $.ajax({
+            type: "GET",
+            url: ajaxURL,
+            success: function(response) {
+                // 가져온 데이터를 테이블에 적용합니다.
+                table.setData(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+
+            }
+        });
+    }
+
+    // function detailButtonFormatter(cell, formatterParams, onRendered) {
+    //     let button = document.createElement("button");
+    //     button.textContent = "오픈";
+    //     button.className = "detail-button btn btn-sm btn-primary";
+    //
+    //     button.addEventListener("click", function() {
+    //         const row = cell.getRow();
+    //         const rowData = cell.getRow().getData();
+    //         console.log("row:", row);
+    //         console.log("Detail button clicked for row:", rowData);
+    //
+    //         $('#modify-form input[name="name"]').val(rowData.name);
+    //         $('#modify-form input[name="content"]').val(rowData.content);
+    //         $('#modify-form input[name="startAt"]').val(formatDate(rowData.startAt, true));  // Assuming you have a function to format date/time
+    //         $('#modify-form input[name="endAt"]').val(formatDate(rowData.endAt, true)); // Assuming you have a function to format date/time
+    //         $('#modify-form input[name="runTime"]').val(rowData.runTime);
+    //         $('#modify-form select[name="status"]').val(rowData.status);
+    //
+    //         $('#modify-modal').modal('show');
+    //
+    //     });
+    //
+    //     return button;
+    // }
 
     function dateTimeFormatter(cell, formatterParams, onRendered) {
         return formatDate(cell.getValue(), true);
@@ -211,7 +293,7 @@ $(document).ready(function(){
         let minutes = ('0' + date.getMinutes()).slice(-2);
         let seconds = ('0' + date.getSeconds()).slice(-2);
 
-        let formattedDate = year + "-" + month + "-" + day + " " + hours + ":" + minutes;
+        let formattedDate = year + "." + month + "." + day + " " + hours + ":" + minutes;
         if (includeSeconds) {
             formattedDate += ":" + seconds;
         }
@@ -220,36 +302,7 @@ $(document).ready(function(){
 
 
     window.registerEvent = registerEvent;
+    window.modifyEvent = modifyEvent;
 
 });
 
-// $(() => {
-//     let $table = $('.listTbl').ajaxDataTable("/sys/company/companyList", data, {
-//         columns: [
-//             { "data": "rownum"},
-//             { "data": "mstrUser" },
-//             { "data": "cmpyRegNmbr" },
-//             { "data": "cmpyCnt" },
-//             { "data": "mstrEmail" },
-//             { "data": "postAddr" },
-//             { "data": "cmpyNm",
-//                 "render": function(data, type, row, meta){
-//                     let cmpyId = row.cmpyId;
-//                     return '<a href="/sys/company/detail?cmpyId='+cmpyId+'" class="linkStyleNone">' + row.cmpyNm + '</a>';
-//                 }
-//             },
-//         ],
-//         columnDefs: [
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 0},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 1},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 2},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 3},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 4},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 5},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 6},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 7},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 8},
-//             { orderable: false, className: 'listTbl__tbody__td', targets: 9},
-//         ],
-//     });
-// });

@@ -23,6 +23,7 @@ public class EventResponse {
 
 	@JsonUnwrapped
 	private EventDetailVo eventDetail;
+	
 
 	public static EventResponse of(Event event) {
 		return EventResponse.builder()

@@ -37,7 +37,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="registerForm">
+                    <form id="register-form">
                         <label for="name" class="form-label">이벤트명</label>
                         <input type="text" id="name" name="name" class="form-control">
 
@@ -61,11 +61,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modify-modal-label">신규 이벤트 등록</h1>
+                    <h1 class="modal-title fs-5" id="modify-modal-label">상세 정보 수정</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="modifyForm">
+                    <form id="modify-form">
                         <label for="name" class="form-label">이벤트명</label>
                         <input type="text" name="name" class="form-control">
 
@@ -75,16 +75,12 @@
                         <label for="modify-datepicker1" class="form-label mt-3">오픈일시</label>
                         <input id="modify-datepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
 
-                        <label for="modify-datepicker2" class="form-label mt-3">종료일시</label>
-                        <input id="modify-datepicker2" name="endAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
-
                         <label for="modify-runTime" class="form-label mt-3">소요시간</label>
                         <input id="modify-runTime" name="runTime" class="form-control" type="number">
 
                         <label for="status" class="form-label mt-3">전시상태</label>
                         <select id="status" name="status" class="form-select">
                             <option th:value="OPEN">진행중</option>
-                            <option th:value="PREPARING">준비중</option>
                             <option th:value="CLOSED">종료된전시</option>
                             <option th:value="DELETED">삭제된전시</option>
                         </select>
@@ -93,7 +89,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
-                    <button type="button" class="btn btn-primary" onclick="registerEvent()">등록하기</button>
+                    <button type="button" class="btn btn-primary" onclick="modifyEvent()">등록하기</button>
                 </div>
             </div>
         </div>

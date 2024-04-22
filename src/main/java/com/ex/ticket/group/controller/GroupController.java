@@ -82,8 +82,6 @@ public class GroupController {
 	public List<GroupEventProfileResponse> getHostEventsById (
 		@PathVariable(name = "groupId") Long groupId
 	) {
-			System.out.println("============getHostEventsById============");
-			System.out.println(groupId);
 		return readGroupEventsUseCase.execute(groupId);
 	}
 

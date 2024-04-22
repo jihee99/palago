@@ -25,7 +25,7 @@ public class CommonEventService {
     }
 
     public List<Event> findAllByGroupId(Long groupId) {
-        return eventRepository.findAllByGroupId(groupId);
+        return eventRepository.findAllByGroupIdOrderByCreatedAt(groupId);
     }
 
     public List<Event> findAllByGroupIdIn(List<Long> groupId) {
