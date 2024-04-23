@@ -25,7 +25,7 @@ public class CreateTicketItemRequest {
 	private String description;
 
 	@NotNull
-	@Schema(defaultValue = "0", nullable = false, example = "4000")
+	@Schema(defaultValue = "0", nullable = false, example = "0")
 	private Long price;
 
 	@NotNull

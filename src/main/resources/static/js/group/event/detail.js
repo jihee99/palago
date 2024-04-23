@@ -1,37 +1,39 @@
-
-// document.addEventListener("DOMContentLoaded", function(event) {
-//     // const datatablesSimple = document.getElementById("datatablesSimple");
-//     // if (datatablesSimple) {
-//     //     new simpleDatatables.DataTable(datatablesSimple);
-//     // }
-//     let table = new Tabulator('#event-table', {
-//         layout:"fitDataStretch",
-//         placeholder:"데이터가 존재하지 않습니다.",
-//         pagination:"local",
-//         paginationSize: 10,
-//         index: "eventId",
-//         ajaxURL:"/api/group/"+$groupId+"/list",
-//         columns: [
-//             {title: "No.", field: "eventId"},
-//             {title: "이벤트명", field: "name", minWidth: 250 },
-//             {title: "시작일시", field: "startAt", minWidth: 250},
-//             {title: "진행시간", field: "runTime", minWidth: 200},
-//             {title: "오픈여부",field: "status", minWidth: 200},
-//             {title: "등록일", field: "createdAt", minWidth: 200},
-//             {title: "상세정보", minWidth: 100, maxWidth: 120}
-//         ]
-//     })
-//
-// });
-
 $(document).ready(function(){
 
     const $groupId = document.getElementById('groupIdContainer').getAttribute('data-group-id');
-    let ajaxURL = `/api/event/${$groupId}/list`;
+    const $eventId = document.getElementById('eventIdContainer').getAttribute('data-group-id');
+    const ajaxURL = `/api/group/event/${$eventId}/ticketItems`;
 
-    let table = new Tabulator('#event-div', {
+    $.ajax({
+        type: "GET",
+        url: `/api/event/${$groupId}/${$eventId}`,
+        contentType: "application/json",
+        success: function(res){
+            console.log("요청이 성공했습니다.");
+            console.log("서버로부터의 응답: ", res);
+
+            $('#modify-form input[name="name"]').val(res.name);
+            $('#modify-form input[name="content"]').val(res.content);
+            $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
+            $('#modify-form input[name="runTime"]').val(res.runTime);
+            // $('#modify-form select[name="status"]').val(res.status);
+            $('#modify-form select[name="status"] option').filter(function() {
+                return $(this).text() === res.status;
+            }).prop('selected', true);
+            
+            // 타입에 따라서 선택가능한 옵션 조정하기
+        },
+        error: function(xhr, status, error){
+            console.error("요청이 실패했습니다.");
+            console.error("에러 내용: ", error);
+        }
+    });
+
+    $('input[name="payType"]:checked').trigger('change');
+
+    let table = new Tabulator('#ticket-div', {
         layout: "fitDataStretch",
-        placeholder: "데이터가 존재하지 않습니다.",
+        placeholder: "발급 티켓이 존재하지 않습니다.",
         pagination: "local",
         paginationSize: 10,
         index: "eventId",
@@ -39,45 +41,19 @@ $(document).ready(function(){
         ajaxResponse: function(url, params, response) {
             // Log the response data to the console
             console.log('AJAX Response:', response);
-            return response;
+            return response.ticketItems;
         },
         columns: [
-            {title: "No.", field: "eventId"},
-            {title: "이벤트명", field: "name", minWidth: 220},
-            {title: "시작일시", field: "startAt", minWidth: 200, formatter: dateTimeFormatter},
-            {title: "종료일시", field: "endAt", minWidth: 200, formatter: dateTimeFormatter},
-            {title: "진행시간", field: "runTime", minWidth: 200},
-            {title: "오픈여부", field: "status", minWidth: 180},
-            {title: "", minWidth: 100, maxWidth: 120,  formatter:(cell, formatterParams, onRendered) => {
-                const rowData = cell.getRow().getData();
-
-                let button = document.createElement("button");
-                button.textContent = "오픈하기";
-                button.className = "detail-button btn btn-sm btn-primary";
-
-                if(rowData.status != '준비중'){
-                    button.disabled = true
-                }
-
-                button.addEventListener("click", function() {
-                    $.ajax({
-                        type: "GET",
-                        url: `/api/group/event/${rowData.eventId}/open`,
-                        contentType: "application/json",
-                        success: function(response){
-                            console.log("요청이 성공했습니다.");
-                            console.log("서버로부터의 응답: ", response);
-                        },
-                        error: function(xhr, status, error){
-                            console.error("요청이 실패했습니다.");
-                            console.error("에러 내용: ", error);
-                        }
-                    });
-                });
-
-                return button;
-            }},
-            {title: "수정", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) =>  {
+            {title: "No.", field: "ticketItemId"},
+            {title: "티켓명", field: "ticketName", minWidth: 220},
+            {title: "설명", field: "description", minWidth: 220},
+            {title: "지불타입", field: "payType", minWidth: 140},
+            {title: "가격", field: "price", minWidth: 120},
+            {title: "승인타입", field: "approveType", minWidth: 120},
+            {title: "제한수량", field: "purchaseLimit", minWidth: 95},
+            {title: "공급량", field: "supplyCount", minWidth: 95},
+            {title: "재고", field: "quantity", minWidth: 95},
+            {title: "수정", formatter: (cell, formatterParams, onRendered) =>  {
                 let button = document.createElement("button");
                 button.textContent = "수정";
                 button.className = "detail-button btn btn-sm btn-secondary";
@@ -85,12 +61,18 @@ $(document).ready(function(){
                 button.addEventListener("click", function() {
                     const rowData = cell.getRow().getData();
                     console.log("Detail button clicked for row:", rowData);
-
-                    window.location.href = `/api/group/${$groupId}/event/${rowData.eventId}/detail`;
+                    // $('#modify-form input[name="name"]').val(rowData.name);
+                    // $('#modify-form input[name="content"]').val(rowData.content);
+                    // $('#modify-form input[name="startAt"]').val(formatDate(rowData.startAt, false));  // Assuming you have a function to format date/time
+                    // $('#modify-form input[name="runTime"]').val(rowData.runTime);
+                    // $('#modify-form select[name="status"]').val(rowData.status);
+                    //
+                    // // $('#modify-modal').modal('show');
+                    // $('#modify-modal').data('eventId', rowData.eventId).modal('show');
                 });
                 return button;
             }},
-            {title: "삭제", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) => {
+            {title: "삭제", formatter: (cell, formatterParams, onRendered) => {
                 let button = document.createElement("button");
                 button.textContent = "삭제";
                 button.className = "detail-button btn btn-sm btn-danger";
@@ -99,20 +81,20 @@ $(document).ready(function(){
                     const rowData = cell.getRow().getData();
 
                     console.log("delete button clicked for row:", rowData);
-                    //TODO /api/group/{groupId}/event/{eventId}/delete ajax 요청하기
-                    $.ajax({
-                        type: "GET",
-                        url: `/api/group/event/${rowData.eventId}/delete`,
-                        success: function(response){
-                            console.log("요청이 성공했습니다.");
-                            console.log("서버로부터의 응답: ", response);
-                            reloadData();
-                        },
-                        error: function(xhr, status, error){
-                            console.error("요청이 실패했습니다.");
-                            console.error("에러 내용: ", error);
-                        }
-                    })
+
+                    // $.ajax({
+                    //     type: "GET",
+                    //     url: `/api/group/event/${rowData.eventId}/delete`,
+                    //     success: function(response){
+                    //         console.log("요청이 성공했습니다.");
+                    //         console.log("서버로부터의 응답: ", response);
+                    //         reloadData();
+                    //     },
+                    //     error: function(xhr, status, error){
+                    //         console.error("요청이 실패했습니다.");
+                    //         console.error("에러 내용: ", error);
+                    //     }
+                    // })
                 });
                 // Return the button element
                 return button;
@@ -125,21 +107,32 @@ $(document).ready(function(){
         minDate: new Date(),
     });
 
-    $('#modify-datepicker1').datetimepicker({
-        format: 'Y.m.d H:i',
-        minDate: new Date(),
+    $('input[name="payType"]').change(function() {
+        // 무료 티켓이 선택된 경우
+        if ($('#freeTicket').is(':checked')) {
+            // approveType을 승인으로 설정하고 수정 불가능하게 합니다.
+            console.log("free")
+            $('input[name="approveType"][value="APPROVAL"]').prop('checked', true).prop('disabled', true);
+            // price를 0으로 설정하고 수정 불가능하게 합니다.
+            $('#price').val(0).prop('disabled', true);
+        } else { // 유료 티켓이 선택된 경우
+            // approveType을 수정 가능하게 합니다.
+            console.log("else")
+            $('input[name="approveType"]').prop('disabled', false);
+            // price를 수정 가능하게 합니다.
+            $('#price').prop('disabled', false);
+        }
     });
 
-
     // 이벤트 등록 함수
-    function registerEvent(){
-        console.log("event register button click function");
+    function registerTicket(){
+        console.log("ticket register button click function");
 
-        let param = {
-            'name': $('#name').val(),
-            'startAt': $('#datetimepicker1').val(),
-            'runTime': $('#runTime').val()
-        };
+        let formData = $('#modify-form').serializeArray();
+        let param = {};
+        formData.forEach(function(item) {
+            param[item.name] = item.value;
+        });
 
         $.ajax({
             type: "POST",
@@ -303,7 +296,7 @@ $(document).ready(function(){
     }
 
 
-    window.registerEvent = registerEvent;
+    window.registerTicket = registerTicket;
     window.modifyEvent = modifyEvent;
 
 });

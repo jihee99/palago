@@ -42,6 +42,7 @@ public class TicketItemMapper {
     public GetEventTicketItemsResponse toGetEventTicketItemsResponse(Long eventId, Boolean isAdmin) {
 
         Event event = commonEventService.findById(eventId);
+
         List<TicketItem> ticketItems = commonTicketItemService.findAllByEventId(event.getId());
         return GetEventTicketItemsResponse.from(
                 ticketItems.stream()

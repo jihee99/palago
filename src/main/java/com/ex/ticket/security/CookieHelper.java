@@ -50,12 +50,13 @@ public class CookieHelper {
     public HttpHeaders deleteCookies() {
         String sameSite = "None";
 
+        System.out.println("==========쿠키헬퍼의 deleteCookie==========");
         ResponseCookie accessToken =
                 ResponseCookie.from("accessToken", null)
                         .path("/")
                         .maxAge(0)
                         .sameSite(sameSite)
-                        //                        .httpOnly(true)
+//                        .httpOnly(true)
                         .secure(true)
                         .build();
         ResponseCookie refreshToken =
@@ -63,7 +64,7 @@ public class CookieHelper {
                         .path("/")
                         .maxAge(0)
                         .sameSite(sameSite)
-                        //                        .httpOnly(true)
+//                        .httpOnly(true)
                         .secure(true)
                         .build();
 

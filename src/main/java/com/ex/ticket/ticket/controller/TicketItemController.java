@@ -1,28 +1,50 @@
 package com.ex.ticket.ticket.controller;
 
+import com.ex.ticket.ticket.domain.dto.request.CreateTicketItemRequest;
 import com.ex.ticket.ticket.domain.dto.request.GetEventTicketItemsResponse;
+import com.ex.ticket.ticket.domain.dto.response.TicketItemResponse;
+import com.ex.ticket.ticket.service.CreateTicketItemUseCase;
+import com.ex.ticket.ticket.service.DeleteTicketItemUseCase;
 import com.ex.ticket.ticket.service.GetEventTicketItemsUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "4. 티켓 상품 관리 API (그룹용)")
 @RestController
-@RequestMapping("/api/v1/events/{eventId}/ticketItems")
+@RequestMapping("/api/group/event/{eventId}/ticketItems")
 @RequiredArgsConstructor
 public class TicketItemController {
 
+    private final CreateTicketItemUseCase createTicketItemUseCase;
     private final GetEventTicketItemsUseCase getEventTicketItemsUseCase;
+
+    private final DeleteTicketItemUseCase deleteTicketItemUseCase;
+
+    @Operation(summary = "이벤트에 속하는 티켓 상품을 생성합니다.")
+    @PostMapping()
+    public TicketItemResponse createTicketItem(
+            @PathVariable Long eventId,
+            @RequestBody @Valid CreateTicketItemRequest createTicketItemRequest) {
+        return createTicketItemUseCase.execute(createTicketItemRequest, eventId);
+    }
 
     @Operation(summary = "해당 이벤트의 티켓상품을 모두 조회합니다.")
     @GetMapping
-    public GetEventTicketItemsResponse getEventTicketItems(@PathVariable Long eventId) {
+    public GetEventTicketItemsResponse getEventTicketItems(
+            @PathVariable(name = "eventId") Long eventId
+    ) {
         return getEventTicketItemsUseCase.execute(eventId);
+    }
+
+    @Operation(summary = "해당 티켓상품을 삭제합니다.")
+    @PostMapping("/{ticketItemId}")
+    public GetEventTicketItemsResponse deleteTicketItem(
+            @PathVariable Long eventId, @PathVariable Long ticketItemId) {
+        return deleteTicketItemUseCase.execute(eventId, ticketItemId);
     }
 
 }

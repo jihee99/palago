@@ -9,9 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequiredArgsConstructor
-public class CommonGroupController {
+public class GroupViewController {
 
-    @GetMapping("/api/group/{groupId}")
+    @GetMapping("/api/group/{groupId}/home")
     public ModelAndView groupHomeByGroupId(
             @PathVariable(name = "groupId") String groupId,
             Model model
@@ -32,6 +32,21 @@ public class CommonGroupController {
         System.out.println("################manageEvent###############");
         System.out.println(groupId);
         modelAndView.addObject("groupId", groupId);
+        return modelAndView;
+    }
+
+    @GetMapping("/api/group/{groupId}/event/{eventId}/detail")
+    public ModelAndView manageEventDetail(
+            @PathVariable(name = "groupId") String groupId,
+            @PathVariable(name = "eventId") String eventId
+    ){
+        ModelAndView modelAndView = new ModelAndView("group/event/detail");
+        System.out.println("################manageEventDetail###############");
+        System.out.println(groupId + "   " + eventId);
+
+        modelAndView.addObject("groupId", groupId);
+        modelAndView.addObject("eventId", eventId);
+
         return modelAndView;
     }
 }

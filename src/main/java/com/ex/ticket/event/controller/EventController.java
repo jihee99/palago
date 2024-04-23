@@ -18,7 +18,7 @@ import java.util.List;
 // @SecurityRequirement(name = "access-token")
 @RestController
 @Tag(name = "3. 이벤트 관련 API (사용자용)")
-@RequestMapping("/api/group/{groupId}")
+@RequestMapping("/api/event/{groupId}")
 @RequiredArgsConstructor
 public class EventController {
 
@@ -37,6 +37,7 @@ public class EventController {
 	@Operation(summary = "전시 상세 정보를 가져옵니다.")
 	@GetMapping("/{eventId}")
 	public EventDetailResponse getEventDetailById(@PathVariable Long eventId) {
+		System.out.println("====전시 상세정보====");
 		return readEventDetailUseCase.execute(eventId);
 	}
 

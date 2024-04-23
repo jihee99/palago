@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/group}"
+>
+<head>
+    <th:block layout:fragment="page_css">
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">-->
+        <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+    <th:block layout:fragment="content_body">
+        <h3 class="mt-4 mb-4">이벤트</h3>
+<!--        <div class="mb-4 text-md-end">-->
+<!--            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규생성</button>-->
+<!--        </div>-->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                상세 정보
+            </div>
+            <div class="card-body">
+                <form id="modify-form">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="name" class="form-label">이벤트명</label>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="content" class="form-label fw-bold">상세설명</label>
+                            <textarea id="content" name="content" class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="modify-datepicker1" class="form-label fw-bold">오픈일시</label>
+                            <input id="modify-datepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
+                        </div>
+                        <div class="col">
+                            <label for="modify-runTime" class="form-label fw-bold">소요시간</label>
+                            <input id="modify-runTime" name="runTime" class="form-control" type="number">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="status" class="form-label fw-bold">전시상태</label>
+                            <select id="status" name="status" class="form-select">
+                                <option th:value="PREPARING">준비중</option>
+                                <option th:value="OPEN">진행중</option>
+                                <option th:value="CLOSED">종료된전시</option>
+                                <option th:value="DELETED">삭제된전시</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <div class="mt-4 mb-3 text-center">
+                    <button type="button" class="btn btn-primary" onclick="modifyEvent()">저장하기</button>
+                </div>
+            </div>
+            <div id="groupIdContainer" th:data-group-id="${groupId}" style="display: none;"></div>
+            <div id="eventIdContainer" th:data-group-id="${eventId}" style="display: none;"></div>
+        </div>
+        <div class="mb-4 text-md-end">
+            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규생성</button>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                발행 티켓 목록
+            </div>
+            <div class="card-body">
+                <div id="ticket-div"></div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="register-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="register-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="register-modal-label">신규 티켓 발행</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <label for="name" class="form-label">티켓명</label>
+                        <input type="text" id="name" name="name" class="form-control">
+
+                        <label for="description" class="form-label mt-3">티켓설명</label>
+                        <textarea id="description" name="description" class="form-control"></textarea>
+
+                        <label for="price" class="form-label mt-3">금액</label>
+                        <input id="price" name="price" class="form-control" type="number">
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="supplyCount" class="form-label mt-3">공급수량</label>
+                                <input id="supplyCount" name="supplyCount" class="form-control" type="number">
+                            </div>
+                            <div class="col">
+                                <label for="purchaseLimit" class="form-label mt-3">구매제한수량</label>
+                                <input id="purchaseLimit" name="purchaseLimit" class="form-control" type="number">
+                            </div>
+                        </div>
+
+                        <label for="payType" class="form-label mt-3">결제방식</label>
+                        <div id="payType" class="mb-2">
+                            <input type="radio" id="freeTicket" name="payType" value="FREE_TICKET" checked >
+                            <label for="freeTicket">무료</label>
+                            <input type="radio" id="priceTicket" name="payType" class="ms-5" value="PRICE_TICKET">
+                            <label for="priceTicket">유료</label>
+                        </div>
+
+                        <label for="approveType" class="form-label mt-3">결제방식</label>
+                        <div id="approveType" class="mb-2">
+                            <input type="radio" id="fcfs" name="approveType" value="FIRST_COME_FIRST_SERVED" >
+                            <label for="fcfs">선착순</label>
+                            <input type="radio" id="appr" name="approveType"  class="ms-5" value="APPROVAL" checked >
+                            <label for="appr">승인</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+                    <button type="button" class="btn btn-primary" onclick="registerTicket()">등록하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </th:block>
+
+    <th:block layout:fragment="page_js">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!--        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>-->
+        <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+        <script th:src="@{/js/group/event/detail.js}"></script>
+    </th:block>
+</body>
+</html>
