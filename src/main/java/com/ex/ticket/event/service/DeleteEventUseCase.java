@@ -13,6 +13,8 @@ public class DeleteEventUseCase {
 
     public EventResponse execute(Long eventId) {
         final Event event = commonEventService.findById(eventId);
+        System.out.println("!!DeleteEventUseCase!!");
+        System.out.println(event.getId());
         return EventResponse.of(eventService.deleteEvent(event));
     }
 
