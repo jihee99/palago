@@ -1,6 +1,5 @@
 package com.ex.ticket.event.controller;
 
-import com.ex.ticket.common.domain.ResultMap;
 import com.ex.ticket.event.domain.dto.request.CreateEventRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventBasicRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventDetailRequest;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -72,7 +70,8 @@ public class GroupEventController {
 	@Operation(summary = "이벤트를 삭제합니다.")
 	@GetMapping("/{eventId}/delete")
 	public EventResponse deleteEvent(@PathVariable Long eventId) {
-		ResultMap result = new ResultMap();
+		System.out.println("=================삭제할거임=================");
+		System.out.println(eventId);
 		return deleteEventUseCase.execute(eventId);
 	}
 

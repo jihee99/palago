@@ -65,12 +65,10 @@ $(document).ready(function(){
                         url: `/api/group/event/${rowData.eventId}/open`,
                         contentType: "application/json",
                         success: function(response){
-                            // 요청이 성공했을 때의 동작을 정의합니다.
                             console.log("요청이 성공했습니다.");
                             console.log("서버로부터의 응답: ", response);
                         },
                         error: function(xhr, status, error){
-                            // 요청이 실패했을 때의 동작을 정의합니다.
                             console.error("요청이 실패했습니다.");
                             console.error("에러 내용: ", error);
                         }
@@ -111,6 +109,19 @@ $(document).ready(function(){
 
                     console.log("delete button clicked for row:", rowData);
                     //TODO /api/group/{groupId}/event/{eventId}/delete ajax 요청하기
+                    $.ajax({
+                        type: "GET",
+                        url: `/api/group/event/${rowData.eventId}/delete`,
+                        success: function(response){
+                            console.log("요청이 성공했습니다.");
+                            console.log("서버로부터의 응답: ", response);
+                            reloadData();
+                        },
+                        error: function(xhr, status, error){
+                            console.error("요청이 실패했습니다.");
+                            console.error("에러 내용: ", error);
+                        }
+                    })
                 });
                 // Return the button element
                 return button;
@@ -148,8 +159,8 @@ $(document).ready(function(){
                 console.log("요청이 성공했습니다.");
                 console.log("서버로부터의 응답: ", response);
 
-                $('#register-modal').modal('close');
-                $('#register-form').reset();
+                $('#register-modal').modal('hide');
+                $('#register-form')[0].reset();
                 reloadData();
             },
             error: function(xhr, status, error){
@@ -217,7 +228,7 @@ $(document).ready(function(){
             console.log("두 번째 요청 결과: ", response2);
 
             $('#modify-modal').modal('hide');
-            $('#modify-form').reset();
+            $('#modify-form')[0].reset();
             alert("success")
             reloadData();
 
