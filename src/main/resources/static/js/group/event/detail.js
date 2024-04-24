@@ -14,6 +14,7 @@ $(document).ready(function(){
     }
     $('input[name="approveType"]').prop('disabled', true);
 
+    // 수정헤야ㅐ함~~~~~~~~~~~~~~!!!!
     let table = new Tabulator('#ticket-div', {
         layout: "fitDataStretch",
         placeholder: "발급 티켓이 존재하지 않습니다.",
@@ -175,7 +176,7 @@ $(document).ready(function(){
     function registerTicket(){
         console.log("ticket register button click function");
 
-        let formData = $('#modify-form').serializeArray();
+        let formData = $('#register-form').serializeArray();
         let param = {};
         formData.forEach(function(item) {
             param[item.name] = item.value;
@@ -183,7 +184,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: "/api/group/event/register",
+            url: `/api/group/event/${$eventId}/ticketItems`,
             contentType: "application/json",
             data: JSON.stringify(param), // param 객체를 JSON 문자열로 변환하여 전송
             success: function(response){
