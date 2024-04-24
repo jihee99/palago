@@ -94,6 +94,14 @@
                         <label for="description" class="form-label mt-3">티켓설명</label>
                         <textarea id="description" name="description" class="form-control"></textarea>
 
+                        <label for="payType" class="form-label mt-3">결제방식</label>
+                        <div id="payType" class="mb-2">
+                            <input type="radio" id="freeTicket" name="payType" value="FREE_TICKET" checked >
+                            <label for="freeTicket">무료</label>
+                            <input type="radio" id="priceTicket" name="payType" class="ms-5" value="PRICE_TICKET">
+                            <label for="priceTicket">유료</label>
+                        </div>
+
                         <label for="price" class="form-label mt-3">금액</label>
                         <input id="price" name="price" class="form-control" type="number">
 
@@ -108,15 +116,8 @@
                             </div>
                         </div>
 
-                        <label for="payType" class="form-label mt-3">결제방식</label>
-                        <div id="payType" class="mb-2">
-                            <input type="radio" id="freeTicket" name="payType" value="FREE_TICKET" checked >
-                            <label for="freeTicket">무료</label>
-                            <input type="radio" id="priceTicket" name="payType" class="ms-5" value="PRICE_TICKET">
-                            <label for="priceTicket">유료</label>
-                        </div>
 
-                        <label for="approveType" class="form-label mt-3">결제방식</label>
+                        <label for="approveType" class="form-label mt-3">승인타입</label>
                         <div id="approveType" class="mb-2">
                             <input type="radio" id="fcfs" name="approveType" value="FIRST_COME_FIRST_SERVED" >
                             <label for="fcfs">선착순</label>

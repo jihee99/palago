@@ -8,7 +8,11 @@ $(document).ready(function(){
 
     setEventInfo();
 
-    $('input[name="payType"]:checked').trigger('change');
+    if ($('#freeTicket').is(':checked')) {
+        $('input[name="approveType"][value="APPROVAL"]').prop('checked', true).prop('disabled', true);
+        $('#price').val(0).prop('disabled', true);
+    }
+    $('input[name="approveType"]').prop('disabled', true);
 
     let table = new Tabulator('#ticket-div', {
         layout: "fitDataStretch",
@@ -87,18 +91,13 @@ $(document).ready(function(){
     });
 
     $('input[name="payType"]').change(function() {
-        // 무료 티켓이 선택된 경우
         if ($('#freeTicket').is(':checked')) {
-            // approveType을 승인으로 설정하고 수정 불가능하게 합니다.
-            console.log("free")
+            $('input[name="approveType"]').prop('disabled', true);
             $('input[name="approveType"][value="APPROVAL"]').prop('checked', true).prop('disabled', true);
-            // price를 0으로 설정하고 수정 불가능하게 합니다.
             $('#price').val(0).prop('disabled', true);
-        } else { // 유료 티켓이 선택된 경우
-            // approveType을 수정 가능하게 합니다.
+        } else {
             console.log("else")
             $('input[name="approveType"]').prop('disabled', false);
-            // price를 수정 가능하게 합니다.
             $('#price').prop('disabled', false);
         }
     });
@@ -233,23 +232,6 @@ $(document).ready(function(){
                 console.error("에러 내용: ", error);
             }
         });
-    }
-
-    function setFormData(res) {
-
-        $('#modify-form input[name="name"]').val(res.name);
-        if (res.content) {
-            $('#modify-form textarea[name="content"]').val(res.content);
-        } else {
-            $('#modify-form textarea[name="content"]').val("");
-        }
-        $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
-        $('#modify-form input[name="runTime"]').val(res.runTime);
-        // $('#modify-form select[name="status"]').val(res.status);
-        $('#modify-form select[name="status"] option').filter(function() {
-            return $(this).text() === res.status;
-        }).prop('selected', true);
-
     }
 
 
