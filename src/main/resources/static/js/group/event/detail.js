@@ -4,30 +4,9 @@ $(document).ready(function(){
     const $eventId = document.getElementById('eventIdContainer').getAttribute('data-group-id');
     const ajaxURL = `/api/group/event/${$eventId}/ticketItems`;
 
-    $.ajax({
-        type: "GET",
-        url: `/api/event/${$groupId}/${$eventId}`,
-        contentType: "application/json",
-        success: function(res){
-            console.log("요청이 성공했습니다.");
-            console.log("서버로부터의 응답: ", res);
+    console.log($groupId, $eventId)
 
-            $('#modify-form input[name="name"]').val(res.name);
-            $('#modify-form input[name="content"]').val(res.content);
-            $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
-            $('#modify-form input[name="runTime"]').val(res.runTime);
-            // $('#modify-form select[name="status"]').val(res.status);
-            $('#modify-form select[name="status"] option').filter(function() {
-                return $(this).text() === res.status;
-            }).prop('selected', true);
-            
-            // 타입에 따라서 선택가능한 옵션 조정하기
-        },
-        error: function(xhr, status, error){
-            console.error("요청이 실패했습니다.");
-            console.error("에러 내용: ", error);
-        }
-    });
+    setEventInfo();
 
     $('input[name="payType"]:checked').trigger('change');
 
@@ -124,7 +103,76 @@ $(document).ready(function(){
         }
     });
 
-    // 이벤트 등록 함수
+    /* 이벤트 수정 함수 */
+    function modifyEvent(){
+        console.log("event modify button click function");
+
+        let formData = $('#modify-form').serializeArray();
+        let param = {};
+        formData.forEach(function(item) {
+            param[item.name] = item.value;
+        });
+
+        let api1 = $.ajax({
+            type: "POST",
+            url: `/api/group/event/${$eventId}/basic`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                // 성공했을 때의 동작을 정의합니다.
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+            },
+            error: function(xhr, status, error) {
+                // 실패했을 때의 동작을 정의합니다.
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+            }
+        });
+
+        let api2 = $.ajax({
+            type: "POST",
+            url: `/api/group/event/${$eventId}/details`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                // 성공했을 때의 동작을 정의합니다.
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+            },
+            error: function(xhr, status, error) {
+                // 실패했을 때의 동작을 정의합니다.
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+            }
+        });
+
+        $.when(api1, api2)
+            .then(function(response1, response2) {
+
+            // 첫 번째 AJAX 요청의 결과(response1)와 두 번째 AJAX 요청의 결과(response2)를 사용하여 작업 수행
+            console.log("모든 요청이 성공적으로 완료되었습니다.");
+            console.log("첫 번째 요청 결과: ", response1);
+            console.log("두 번째 요청 결과: ", response2);
+
+            $('#modify-form')[0].reset();
+            alert("success");
+            setEventInfo();
+
+            }).fail(function(xhr, status, error){
+                // 하나 이상의 AJAX 요청이 실패한 경우에 대한 처리
+                console.error("하나 이상의 요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+
+                let errorResponse = JSON.parse(xhr.responseText);
+                let errorMessage = errorResponse.errors[0].defaultMessage;
+
+                alert(errorMessage);
+            });
+
+    }
+
+
     function registerTicket(){
         console.log("ticket register button click function");
 
@@ -155,99 +203,55 @@ $(document).ready(function(){
         });
     }
 
-    /* 이벤트 수정 함수 */
-    function modifyEvent(){
-        console.log("event modify button click function");
 
-        const eventId = $('#modify-modal').data('eventId');
+    function setEventInfo() {
 
-        let formData = $('#modify-form').serializeArray();
-        let param = {};
-        formData.forEach(function(item) {
-            param[item.name] = item.value;
-        });
-
-        console.log(param);
-
-        let api1 = $.ajax({
-            type: "POST",
-            url: `/api/group/event/${eventId}/basic`,
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(response){
-                // 성공했을 때의 동작을 정의합니다.
-                console.log("요청이 성공했습니다.");
-                console.log("서버로부터의 응답: ", response);
-            },
-            error: function(xhr, status, error) {
-                // 실패했을 때의 동작을 정의합니다.
-                console.error("요청이 실패했습니다.");
-                console.error("에러 내용: ", error);
-            }
-        });
-
-        let api2 = $.ajax({
-            type: "POST",
-            url: `/api/group/event/${eventId}/details`,
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(response){
-                // 성공했을 때의 동작을 정의합니다.
-                console.log("요청이 성공했습니다.");
-                console.log("서버로부터의 응답: ", response);
-            },
-            error: function(xhr, status, error) {
-                // 실패했을 때의 동작을 정의합니다.
-                console.error("요청이 실패했습니다.");
-                console.error("에러 내용: ", error);
-            }
-        });
-
-        $.when(api1, api2)
-            .then(function(response1, response2) {
-
-            // 첫 번째 AJAX 요청의 결과(response1)와 두 번째 AJAX 요청의 결과(response2)를 사용하여 작업 수행
-            console.log("모든 요청이 성공적으로 완료되었습니다.");
-            console.log("첫 번째 요청 결과: ", response1);
-            console.log("두 번째 요청 결과: ", response2);
-
-            $('#modify-modal').modal('hide');
-            $('#modify-form')[0].reset();
-            alert("success")
-            reloadData();
-
-            }).fail(function(xhr, status, error){
-                // 하나 이상의 AJAX 요청이 실패한 경우에 대한 처리
-                console.error("하나 이상의 요청이 실패했습니다.");
-                console.error("에러 내용: ", error);
-
-                console.log(xhr.responseText);
-                let errorResponse = JSON.parse(xhr.responseText);
-                let errorMessage = errorResponse.errors[0].defaultMessage;
-                console.log(errorMessage);
-
-                alert(errorMessage);
-
-            });
-
-    }
-
-    function reloadData() {
-        // AJAX 요청을 보내어 새로운 데이터를 가져옵니다.
         $.ajax({
             type: "GET",
-            url: ajaxURL,
-            success: function(response) {
-                // 가져온 데이터를 테이블에 적용합니다.
-                table.setData(response);
+            url: `/api/event/${$groupId}/${$eventId}`,
+            contentType: "application/json",
+            success: function(res){
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", res);
+
+                $('#modify-form input[name="name"]').val(res.name);
+                if (res.content) {
+                    $('#modify-form textarea[name="content"]').val(res.content);
+                } else {
+                    $('#modify-form textarea[name="content"]').val("");
+                }
+                $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
+                $('#modify-form input[name="runTime"]').val(res.runTime);
+                // $('#modify-form select[name="status"]').val(res.status);
+                $('#modify-form select[name="status"] option').filter(function() {
+                    return $(this).text() === res.status;
+                }).prop('selected', true);
+
             },
-            error: function(xhr, status, error) {
+            error: function(xhr, status, error){
                 console.error("요청이 실패했습니다.");
                 console.error("에러 내용: ", error);
-
             }
         });
     }
+
+    function setFormData(res) {
+
+        $('#modify-form input[name="name"]').val(res.name);
+        if (res.content) {
+            $('#modify-form textarea[name="content"]').val(res.content);
+        } else {
+            $('#modify-form textarea[name="content"]').val("");
+        }
+        $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
+        $('#modify-form input[name="runTime"]').val(res.runTime);
+        // $('#modify-form select[name="status"]').val(res.status);
+        $('#modify-form select[name="status"] option').filter(function() {
+            return $(this).text() === res.status;
+        }).prop('selected', true);
+
+    }
+
 
     // function detailButtonFormatter(cell, formatterParams, onRendered) {
     //     let button = document.createElement("button");

@@ -30,7 +30,6 @@ public class GroupEventController {
 	@Operation(summary = "전시 기본 정보를 등록하여, 새로운 이벤트를 생성합니다.")
 	@PostMapping("/register")
 	public EventResponse createEvent(@RequestBody @Valid CreateEventRequest createEventRequest) {
-		log.info("{} {} {}", createEventRequest.getName(), createEventRequest.getStartAt(), createEventRequest.getRunTime());
 		return createEventUseCase.execute(createEventRequest);
 	}
 
@@ -50,6 +49,7 @@ public class GroupEventController {
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventDetailRequest updateEventDetailRequest) {
 		System.out.println("=========전시 상세 정보 수정 ===========");
+		System.out.println(updateEventDetailRequest.getContent());
 		return updateEventDetailUseCase.execute(eventId, updateEventDetailRequest);
 	}
 

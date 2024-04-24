@@ -1,6 +1,7 @@
 package com.ex.ticket.event.domain.dto.response;
 
 import com.ex.ticket.common.vo.EventBasicVo;
+import com.ex.ticket.common.vo.EventDetailVo;
 import com.ex.ticket.common.vo.GroupInfoVo;
 import com.ex.ticket.event.domain.entity.Event;
 import com.ex.ticket.event.domain.entity.EventStatus;
@@ -16,10 +17,12 @@ public class EventDetailResponse {
 	private GroupInfoVo group;
 	@JsonUnwrapped
 	private EventBasicVo eventBasicVo;
-
+	@JsonUnwrapped
+	private EventDetailVo eventDetailVo;
 	public static EventDetailResponse of(Group group, Event event) {
 		return EventDetailResponse.builder()
 			.eventBasicVo(event.toEventBasicVo())
+			.eventDetailVo(event.toEventDetailVo())
 			.group(group.toGroupInfoVo())
 			.status(event.getStatus())
 			.build();

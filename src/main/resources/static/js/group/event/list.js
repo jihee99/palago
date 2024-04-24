@@ -50,12 +50,11 @@ $(document).ready(function(){
             {title: "오픈여부", field: "status", minWidth: 180},
             {title: "", minWidth: 100, maxWidth: 120,  formatter:(cell, formatterParams, onRendered) => {
                 const rowData = cell.getRow().getData();
-
                 let button = document.createElement("button");
                 button.textContent = "오픈하기";
                 button.className = "detail-button btn btn-sm btn-primary";
 
-                if(rowData.status != '준비중'){
+                if(rowData.status != '준비중' || rowData.content == null){
                     button.disabled = true
                 }
 
@@ -69,6 +68,7 @@ $(document).ready(function(){
                             console.log("서버로부터의 응답: ", response);
                         },
                         error: function(xhr, status, error){
+                            console.log(xhr)
                             console.error("요청이 실패했습니다.");
                             console.error("에러 내용: ", error);
                         }

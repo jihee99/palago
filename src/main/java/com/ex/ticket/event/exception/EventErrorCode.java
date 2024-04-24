@@ -36,7 +36,6 @@ public enum EventErrorCode implements BaseErrorCode {
 
     @Override
     public ErrorReason getErrorReason() {
-        System.out.println(errorMessage);
         return ErrorReason.builder().errorCode(code).errorMessage(errorMessage).build();
     }
 
