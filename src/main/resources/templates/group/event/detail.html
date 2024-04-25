@@ -25,7 +25,7 @@
                 <form id="modify-form">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="name" class="form-label">이벤트명</label>
+                            <label for="name" class="form-label fw-bold">이벤트명</label>
                             <input type="text" name="name" class="form-control">
                         </div>
                     </div>
@@ -55,6 +55,12 @@
                                 <option th:value="CLOSED">종료된전시</option>
                                 <option th:value="DELETED">삭제된전시</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-auto">
+                            <label for="name" class="form-label fw-bold">포스터</label>
+                            <input type="file" id="file-input" class="form-control mt-2" >
                         </div>
                     </div>
                 </form>

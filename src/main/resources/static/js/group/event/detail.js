@@ -143,6 +143,7 @@ $(document).ready(function(){
 
                 $('#register-modal').modal('hide');
                 $('#register-form')[0].reset();
+                alert("요청이 성공했습니다.");
                 init();
             },
             error: function(xhr, status, error){
@@ -160,9 +161,6 @@ $(document).ready(function(){
             url: `/api/event/${$groupId}/${$eventId}`,
             contentType: "application/json",
             success: function(res){
-                console.log("요청이 성공했습니다.");
-                console.log("서버로부터의 응답: ", res);
-
                 $('#modify-form input[name="name"]').val(res.name);
                 if (res.content!=null) {
                     $('#modify-form textarea[name="content"]').val(res.content);
@@ -200,34 +198,15 @@ $(document).ready(function(){
             },
             columns: [
                 {title: "No.", field: "ticketItemId"},
-                {title: "티켓명", field: "ticketName", minWidth: 220},
-                {title: "설명", field: "description", minWidth: 220},
-                {title: "지불타입", field: "payType", minWidth: 140},
-                {title: "가격", field: "price", minWidth: 120},
-                {title: "승인타입", field: "approveType", minWidth: 120},
+                {title: "티켓명", field: "ticketName", minWidth: 250},
+                {title: "설명", field: "description", minWidth: 300},
+                {title: "지불타입", field: "payType", minWidth: 150},
+                {title: "가격", field: "price", minWidth: 150},
+                {title: "승인타입", field: "approveType", minWidth: 150},
                 {title: "제한수량", field: "purchaseLimit", minWidth: 95},
                 {title: "공급량", field: "supplyCount", minWidth: 95},
                 {title: "재고", field: "quantity", minWidth: 95},
-                {title: "수정", formatter: (cell, formatterParams, onRendered) =>  {
-                        let button = document.createElement("button");
-                        button.textContent = "수정";
-                        button.className = "detail-button btn btn-sm btn-secondary";
-
-                        button.addEventListener("click", function() {
-                            const rowData = cell.getRow().getData();
-                            console.log("Detail button clicked for row:", rowData);
-                            // $('#modify-form input[name="name"]').val(rowData.name);
-                            // $('#modify-form input[name="content"]').val(rowData.content);
-                            // $('#modify-form input[name="startAt"]').val(formatDate(rowData.startAt, false));  // Assuming you have a function to format date/time
-                            // $('#modify-form input[name="runTime"]').val(rowData.runTime);
-                            // $('#modify-form select[name="status"]').val(rowData.status);
-                            //
-                            // // $('#modify-modal').modal('show');
-                            // $('#modify-modal').data('eventId', rowData.eventId).modal('show');
-                        });
-                        return button;
-                    }},
-                {title: "삭제", formatter: (cell, formatterParams, onRendered) => {
+                {title: "삭제", minWidth:70, formatter: (cell, formatterParams, onRendered) => {
                         const rowData = cell.getRow().getData();
 
                         let button = document.createElement("button");
@@ -236,9 +215,9 @@ $(document).ready(function(){
 
                         // TODO
                         // rowData.quantity > 0 || rowData.isSold == true 일 때 버튼 disable
-                        // if (!rowData.isSold) {
-                        //     button.disabled = true;
-                        // }
+                        if (rowData.isSold) {
+                            button.disabled = true;
+                        }
 
                         button.addEventListener("click", function() {
                             console.log("delete button clicked for row:", rowData);
@@ -246,12 +225,13 @@ $(document).ready(function(){
                             // 재고가 감소하지 않은 티켓만 삭제할 수 있다.
                             if(!rowData.isSold){
                                 $.ajax({
-                                    type: "GET",
+                                    type: "POST",
                                     url: `/api/group/event/${$eventId}/ticketItems/${rowData.ticketItemId}`,
                                     success: function(response){
+                                        alert("티켓이 삭제되었습니다.");
                                         console.log("요청이 성공했습니다.");
                                         console.log("서버로부터의 응답: ", response);
-                                        reloadData();
+                                        setTicketItemTable();
                                     },
                                     error: function(xhr, status, error){
                                         console.error("요청이 실패했습니다.");
