@@ -4,6 +4,7 @@ import com.ex.ticket.event.domain.dto.request.CreateEventRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventBasicRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventDetailRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventStatusRequest;
+import com.ex.ticket.event.domain.dto.response.EventProfileResponse;
 import com.ex.ticket.event.domain.dto.response.EventResponse;
 import com.ex.ticket.event.service.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -26,6 +29,13 @@ public class GroupEventController {
  	private final UpdateEventStatusUseCase updateEventStatusUseCase;
 	private final OpenEventUseCase openEventUseCase;
 	private final DeleteEventUseCase deleteEventUseCase;
+	private final ReadGroupUserEventListUseCase readGroupUserEventListUseCase;
+
+	@Operation(summary = "자신이 관리 중인 이벤트 리스트를 가져옵니다.")
+	@GetMapping
+	public List<EventProfileResponse> getAllEventByUser() {
+		return readGroupUserEventListUseCase.execute();
+	}
 
 	@Operation(summary = "전시 기본 정보를 등록하여, 새로운 이벤트를 생성합니다.")
 	@PostMapping("/register")
@@ -38,8 +48,6 @@ public class GroupEventController {
 	public EventResponse updateEventBasic(
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventBasicRequest updateEventBasicRequest) {
-
-		System.out.println("=========전시 기본 정보 수정 ===========");
 		return updateEventBasicUseCase.execute(eventId, updateEventBasicRequest);
 	}
 
@@ -48,8 +56,6 @@ public class GroupEventController {
 	public EventResponse updateEventDetail(
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventDetailRequest updateEventDetailRequest) {
-		System.out.println("=========전시 상세 정보 수정 ===========");
-		System.out.println(updateEventDetailRequest.getContent());
 		return updateEventDetailUseCase.execute(eventId, updateEventDetailRequest);
 	}
 
@@ -70,8 +76,6 @@ public class GroupEventController {
 	@Operation(summary = "이벤트를 삭제합니다.")
 	@GetMapping("/{eventId}/delete")
 	public EventResponse deleteEvent(@PathVariable Long eventId) {
-		System.out.println("=================삭제할거임=================");
-		System.out.println(eventId);
 		return deleteEventUseCase.execute(eventId);
 	}
 

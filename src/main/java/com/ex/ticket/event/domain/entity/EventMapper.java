@@ -5,6 +5,7 @@ import com.ex.ticket.event.domain.dto.request.CreateEventRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventBasicRequest;
 import com.ex.ticket.event.domain.dto.request.UpdateEventDetailRequest;
 import com.ex.ticket.event.domain.dto.response.EventDetailResponse;
+import com.ex.ticket.event.domain.dto.response.EventProfileResponse;
 import com.ex.ticket.event.domain.dto.response.EventResponse;
 import com.ex.ticket.event.service.CommonEventService;
 import com.ex.ticket.group.domain.entity.Group;
@@ -13,6 +14,7 @@ import com.ex.ticket.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Mapper
@@ -56,6 +58,26 @@ public class EventMapper {
 				.runTime(updateEventBasicRequest.getRunTime())
 				.startAt(updateEventBasicRequest.getStartAt())
 				.build();
+	}
+
+	public List<EventProfileResponse> toEventProfileResponseList(Long userId) {
+		List<Group> groups =groupService.findAllByGroupUsers_UserId(userId);
+		List<Long> groupIds = groups.stream().map(Group::getId).toList();
+
+		List<Event> events = commonEventService.queryEventsByGroupIdIn(groupIds);
+
+		return events.stream()
+				.map(event -> this.toEventProfileResponse(groups, event))
+				.filter(Objects::nonNull)
+				.toList()
+				;
+	}
+
+	private EventProfileResponse toEventProfileResponse(List<Group> groupList, Event event) {
+		for (Group group : groupList) {
+			if (group.getId().equals(event.getGroupId())) return EventProfileResponse.of(group, event);
+		}
+		return null;
 	}
 
 

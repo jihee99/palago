@@ -21,7 +21,6 @@ public class TicketItemController {
 
     private final CreateTicketItemUseCase createTicketItemUseCase;
     private final GetEventTicketItemsUseCase getEventTicketItemsUseCase;
-
     private final DeleteTicketItemUseCase deleteTicketItemUseCase;
 
     @Operation(summary = "이벤트에 속하는 티켓 상품을 생성합니다.")
@@ -45,6 +44,12 @@ public class TicketItemController {
     public GetEventTicketItemsResponse deleteTicketItem(
             @PathVariable Long eventId, @PathVariable Long ticketItemId) {
         return deleteTicketItemUseCase.execute(eventId, ticketItemId);
+    }
+
+    @Operation(summary = "해당 이벤트의 티켓상품을 모두 조회합니다.", description = "재고 정보가 무조건 공개됩니다.")
+    @GetMapping("/admin")
+    public GetEventTicketItemsResponse getEventTicketItemsForManager(@PathVariable Long eventId) {
+        return getEventTicketItemsUseCase.executeForManager(eventId);
     }
 
 }
