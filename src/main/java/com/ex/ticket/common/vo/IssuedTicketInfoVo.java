@@ -1,9 +1,9 @@
 package com.ex.ticket.common.vo;
 
 import com.ex.ticket.common.annotation.DateFormat;
-import com.ex.ticket.ticket.domain.entity.IssuedTicket;
-import com.ex.ticket.ticket.domain.entity.IssuedTicketStatus;
-import com.ex.ticket.ticket.domain.entity.TicketPayType;
+import com.ex.ticket.ticketItem.domain.entity.IssuedTicket;
+import com.ex.ticket.ticketItem.domain.entity.IssuedTicketStatus;
+import com.ex.ticket.ticketItem.domain.entity.TicketPayType;
 import lombok.Getter;
 import lombok.Builder;
 

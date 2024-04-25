@@ -64,8 +64,6 @@ public class SecurityConfig {
 
 //			.addFilter(corsFilter)
 			.formLogin(AbstractHttpConfigurer::disable)
-
-
 			.authorizeHttpRequests(requests -> requests
 				.requestMatchers(allowedUrls).permitAll()
 

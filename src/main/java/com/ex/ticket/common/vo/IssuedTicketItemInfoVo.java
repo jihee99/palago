@@ -1,8 +1,8 @@
 package com.ex.ticket.common.vo;
 
-import com.ex.ticket.ticket.domain.entity.TicketItem;
-import com.ex.ticket.ticket.domain.entity.TicketPayType;
-import com.ex.ticket.ticket.domain.entity.TicketType;
+import com.ex.ticket.ticketItem.domain.entity.TicketItem;
+import com.ex.ticket.ticketItem.domain.entity.TicketPayType;
+import com.ex.ticket.ticketItem.domain.entity.TicketType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

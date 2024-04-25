@@ -8,7 +8,7 @@ import com.ex.ticket.event.exception.CannotDeleteByIssuedTicketException;
 import com.ex.ticket.event.exception.CannotOpenEventException;
 import com.ex.ticket.event.exception.UseAnotherApiException;
 import com.ex.ticket.event.repository.EventRepository;
-import com.ex.ticket.ticket.service.CommonIssuedTicketService;
+import com.ex.ticket.ticketItem.service.CommonIssuedTicketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
