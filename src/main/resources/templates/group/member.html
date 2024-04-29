@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/group}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>그룹 관리자</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/group-styles.css}" >
+
+    <th:block layout:fragment="page_css">
+    </th:block>
+</head>
+<body>
+    <th:block layout:fragment="content_body">
+        <h3 class="mt-4 mb-4">그룹매니저 관리하기</h3>
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-regular fa-address-card me-1"></i>
+                그룹매니저 목록
+            </div>
+            <div class="card-body">
+                <div id="group-div">
+                    <div id="groupIdContainer" th:data-group-id="${groupId}" style="display: none;"></div>
+                    <div class="mb-4 text-md-end">
+                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규매니저등록</button>
+                    </div>
+                    <div id="table"></div>
+                </div>
+            </div>
+
+
+        </div>
+    </th:block>
+
+    <th:block layout:fragment="page_js">
+        <script th:src="@{/js/group/member.js}"></script>
+    </th:block>
+
+</body>
+</html>

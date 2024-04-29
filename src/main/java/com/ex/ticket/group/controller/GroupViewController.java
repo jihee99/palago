@@ -19,6 +19,15 @@ public class GroupViewController {
         return modelAndView;
     }
 
+    @GetMapping("/api/group/{groupId}/manager")
+    public ModelAndView managerGroupUser(
+        @PathVariable(name = "groupId") String groupId
+    ){
+        ModelAndView modelAndView = new ModelAndView("group/member");
+        modelAndView.addObject("groupId", groupId);
+        return modelAndView;
+    }
+
     @GetMapping("/api/group/{groupId}/event")
     public ModelAndView manageEvent(
             @PathVariable(name = "groupId") String groupId

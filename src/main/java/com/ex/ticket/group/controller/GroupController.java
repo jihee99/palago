@@ -5,6 +5,7 @@ import com.ex.ticket.group.domain.dto.request.UpdateGroupRequest;
 import com.ex.ticket.group.domain.dto.response.GroupDetailResponse;
 import com.ex.ticket.group.domain.dto.response.GroupEventProfileResponse;
 import com.ex.ticket.group.domain.dto.response.GroupProfileResponse;
+import com.ex.ticket.group.domain.dto.response.GroupUserResponse;
 import com.ex.ticket.group.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,15 +31,20 @@ public class GroupController {
 	private final ReadGroupEventUseCase readGroupEventsUseCase;
 	private final ReadGroupsUseCase readGroupsUseCase;
 	private final ReadGroupUseCase readGroupUseCase;
-
+	private final ReadGroupUserUseCase readGroupUserUseCase;
 
 	@Operation(summary = "내가 속한 그룹 리스트를 가져옵니다.")
 	@GetMapping
 	public List<GroupProfileResponse> getAllGroups() {
-
 		List<GroupProfileResponse> list = readGroupsUseCase.execute();
 		log.info("{}", list.stream().toList());
 		return readGroupsUseCase.execute();
+	}
+
+	@Operation(summary = "그룹에 속한 매니저 리스트를 가져옵니다.")
+	@GetMapping("/{groupId}/list")
+	public GroupUserResponse getAllGroupUsers(@PathVariable Long groupId) {
+		return readGroupUserUseCase.execute(groupId);
 	}
 
 	@Operation(summary = "고유 아이디에 해당하는 그룹 정보를 가져옵니다.")
