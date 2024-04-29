@@ -37,10 +37,16 @@
 
 
  		groupRepository.save(group);
+
  		final GroupUser masterGroupUser = toMasterGroupUser(group, 3L);
  		group.addGroupUsers(Set.of(masterGroupUser));
- 		group.getGroupUsers().forEach(GroupUser::activate);
- 		groupRepository.save(group);
+ 		// group.getGroupUsers().forEach(GroupUser::activate);
+ 		// groupRepository.save(group);
+
+		final GroupUser managerGroupUser = toManagerGroupUser(group, 2L);
+		group.addGroupUsers(Set.of(managerGroupUser));
+		group.getGroupUsers().forEach(GroupUser::activate);
+		groupRepository.save(group);
 
 		LocalDateTime currentTime = LocalDateTime.now();
 		LocalDateTime thirtyMinutesLater = currentTime.plus(30, ChronoUnit.MINUTES);
@@ -58,5 +64,9 @@
  	public GroupUser toMasterGroupUser(Group group, Long userId) {
  		return GroupUser.builder().userId(userId).group(group).role(GroupUserRole.MASTER).build();
  	}
+
+	 public GroupUser toManagerGroupUser(Group group, Long userId) {
+		 return GroupUser.builder().userId(userId).group(group).role(GroupUserRole.MANAGER).build();
+	 }
 
  }
