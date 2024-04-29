@@ -23,7 +23,7 @@ $(document).ready(function(){
             {title: "종료일시", field: "endAt", minWidth: 200, formatter: dateTimeFormatter},
             {title: "진행시간", field: "runTime", minWidth: 200},
             {title: "오픈여부", field: "status", minWidth: 180},
-            {title: "", minWidth: 100, maxWidth: 110,  formatter:(cell, formatterParams, onRendered) => {
+            {title: "", minWidth: 90, maxWidth: 100,  formatter:(cell, formatterParams, onRendered) => {
                 const rowData = cell.getRow().getData();
                 let button = document.createElement("button");
                 button.textContent = "오픈하기";
@@ -51,10 +51,9 @@ $(document).ready(function(){
                         }
                     });
                 });
-
                 return button;
             }},
-            {title: "상태변경", minWidth: 100, maxWidth: 110, formatter: (cell, formatterParams, onRendered) =>  {
+            {title: "상태변경", minWidth: 90, maxWidth: 100, formatter: (cell, formatterParams, onRendered) =>  {
                 const rowData = cell.getRow().getData();
                 let button = document.createElement("button");
                 button.textContent = "상태변경";
