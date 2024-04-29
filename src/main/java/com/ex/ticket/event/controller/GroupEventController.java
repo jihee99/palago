@@ -70,6 +70,7 @@ public class GroupEventController {
 	public EventResponse updateEventStatus(
 		@PathVariable Long eventId,
 		@RequestBody @Valid UpdateEventStatusRequest updateEventDetailRequest) {
+		System.out.println("================= updateEventStatus ================= ");
 		return updateEventStatusUseCase.execute(eventId, updateEventDetailRequest);
 	}
 

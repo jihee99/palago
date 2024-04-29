@@ -1,32 +1,7 @@
-
-// document.addEventListener("DOMContentLoaded", function(event) {
-//     // const datatablesSimple = document.getElementById("datatablesSimple");
-//     // if (datatablesSimple) {
-//     //     new simpleDatatables.DataTable(datatablesSimple);
-//     // }
-//     let table = new Tabulator('#event-table', {
-//         layout:"fitDataStretch",
-//         placeholder:"데이터가 존재하지 않습니다.",
-//         pagination:"local",
-//         paginationSize: 10,
-//         index: "eventId",
-//         ajaxURL:"/api/group/"+$groupId+"/list",
-//         columns: [
-//             {title: "No.", field: "eventId"},
-//             {title: "이벤트명", field: "name", minWidth: 250 },
-//             {title: "시작일시", field: "startAt", minWidth: 250},
-//             {title: "진행시간", field: "runTime", minWidth: 200},
-//             {title: "오픈여부",field: "status", minWidth: 200},
-//             {title: "등록일", field: "createdAt", minWidth: 200},
-//             {title: "상세정보", minWidth: 100, maxWidth: 120}
-//         ]
-//     })
-//
-// });
-
 $(document).ready(function(){
 
     const $groupId = document.getElementById('groupIdContainer').getAttribute('data-group-id');
+    let $eventId;
     let ajaxURL = `/api/event/${$groupId}/list`;
 
     let table = new Tabulator('#event-div', {
@@ -48,7 +23,7 @@ $(document).ready(function(){
             {title: "종료일시", field: "endAt", minWidth: 200, formatter: dateTimeFormatter},
             {title: "진행시간", field: "runTime", minWidth: 200},
             {title: "오픈여부", field: "status", minWidth: 180},
-            {title: "", minWidth: 100, maxWidth: 120,  formatter:(cell, formatterParams, onRendered) => {
+            {title: "", minWidth: 100, maxWidth: 110,  formatter:(cell, formatterParams, onRendered) => {
                 const rowData = cell.getRow().getData();
                 let button = document.createElement("button");
                 button.textContent = "오픈하기";
@@ -66,6 +41,8 @@ $(document).ready(function(){
                         success: function(response){
                             console.log("요청이 성공했습니다.");
                             console.log("서버로부터의 응답: ", response);
+
+                            reloadData();
                         },
                         error: function(xhr, status, error){
                             console.log(xhr)
@@ -73,6 +50,31 @@ $(document).ready(function(){
                             console.error("에러 내용: ", error);
                         }
                     });
+                });
+
+                return button;
+            }},
+            {title: "상태변경", minWidth: 100, maxWidth: 110, formatter: (cell, formatterParams, onRendered) =>  {
+                const rowData = cell.getRow().getData();
+                let button = document.createElement("button");
+                button.textContent = "상태변경";
+                button.className = "detail-button btn btn-sm btn-primary";
+
+                var selectedStatus = rowData.status;
+
+                var statusSelect = $('#status');
+
+                statusSelect.find('option').each(function() {
+                    if ($(this).text() === selectedStatus) {
+                        $(this).prop('selected', true);
+                    } else {
+                        $(this).prop('selected', false);
+                    }
+                });
+
+                button.addEventListener("click", function() {
+                    $eventId = rowData.eventId;
+                    $('#status-modal').modal('show');
                 });
 
                 return button;
@@ -130,6 +132,29 @@ $(document).ready(function(){
         minDate: new Date(),
     });
 
+    $('#modify-btn').on('click', function(e){
+        let param = {
+            'status' : $('#status').val()
+        };
+        console.log(param)
+        $.ajax({
+            type: "POST",
+            url: `/api/group/event/${$eventId}/status`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                console.log("요청이 성공했습니다.");
+                console.log("서버로부터의 응답: ", response);
+                reloadData();
+                $('#status-modal').modal('hide');
+            },
+            error: function(xhr, status, error){
+                console.error("요청이 실패했습니다.");
+                console.error("에러 내용: ", error);
+                alert("전시 상태를 확인하세요");
+            }
+        })
+    })
 
     // 이벤트 등록 함수
     function registerEvent(){

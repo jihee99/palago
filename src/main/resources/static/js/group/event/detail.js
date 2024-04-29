@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     const $groupId = document.getElementById('groupIdContainer').getAttribute('data-group-id');
-    const $eventId = document.getElementById('eventIdContainer').getAttribute('data-group-id');
+    const $eventId = document.getElementById('eventIdContainer').getAttribute('data-event-id');
     const ajaxURL = `/api/group/event/${$eventId}/ticketItems`;
 
     console.log($groupId, $eventId)
@@ -161,11 +161,13 @@ $(document).ready(function(){
             url: `/api/event/${$groupId}/${$eventId}`,
             contentType: "application/json",
             success: function(res){
+                console.log("set Evnet Info",res)
                 $('#modify-form input[name="name"]').val(res.name);
                 if (res.content!=null) {
                     $('#modify-form textarea[name="content"]').val(res.content);
-                } else {
-                    $('#modify-form textarea[name="content"]').val("");
+                }
+                if(res.address != null){
+                    $('#modify-form input[name="address"]').val(res.address);
                 }
                 $('#modify-form input[name="startAt"]').val(formatDate(res.startAt, false));  // Assuming you have a function to format date/time
                 $('#modify-form input[name="runTime"]').val(res.runTime);

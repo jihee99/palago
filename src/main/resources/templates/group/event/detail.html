@@ -38,23 +38,18 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col">
+                            <label for="address" class="form-label fw-bold">주소</label>
+                            <input id="address" type="text" name="address" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
                             <label for="datepicker1" class="form-label fw-bold">오픈일시</label>
                             <input id="datepicker1" name="startAt" class="form-control" type="text" placeholder="yyyy-MM-dd HH:mm">
                         </div>
                         <div class="col">
                             <label for="modify-runTime" class="form-label fw-bold">소요시간</label>
                             <input id="modify-runTime" name="runTime" class="form-control" type="number">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="status" class="form-label fw-bold">전시상태</label>
-                            <select id="status" name="status" class="form-select">
-                                <option th:value="PREPARING">준비중</option>
-                                <option th:value="OPEN">진행중</option>
-                                <option th:value="CLOSED">종료된전시</option>
-                                <option th:value="DELETED">삭제된전시</option>
-                            </select>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -69,7 +64,7 @@
                 </div>
             </div>
             <div id="groupIdContainer" th:data-group-id="${groupId}" style="display: none;"></div>
-            <div id="eventIdContainer" th:data-group-id="${eventId}" style="display: none;"></div>
+            <div id="eventIdContainer" th:data-event-id="${eventId}" style="display: none;"></div>
         </div>
         <div class="mb-4 text-md-end">
             <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규생성</button>
