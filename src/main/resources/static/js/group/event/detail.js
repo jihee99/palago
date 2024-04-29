@@ -47,12 +47,10 @@ $(document).ready(function(){
             contentType: "application/json",
             data: JSON.stringify(param),
             success: function(response){
-                // 성공했을 때의 동작을 정의합니다.
                 console.log("요청이 성공했습니다.");
                 console.log("서버로부터의 응답: ", response);
             },
             error: function(xhr, status, error) {
-                // 실패했을 때의 동작을 정의합니다.
                 console.error("요청이 실패했습니다.");
                 console.error("에러 내용: ", error);
             }
@@ -64,12 +62,10 @@ $(document).ready(function(){
             contentType: "application/json",
             data: JSON.stringify(param),
             success: function(response){
-                // 성공했을 때의 동작을 정의합니다.
                 console.log("요청이 성공했습니다.");
                 console.log("서버로부터의 응답: ", response);
             },
             error: function(xhr, status, error) {
-                // 실패했을 때의 동작을 정의합니다.
                 console.error("요청이 실패했습니다.");
                 console.error("에러 내용: ", error);
             }

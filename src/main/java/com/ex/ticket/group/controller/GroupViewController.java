@@ -1,7 +1,6 @@
 package com.ex.ticket.group.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +12,7 @@ public class GroupViewController {
 
     @GetMapping("/api/group/{groupId}/home")
     public ModelAndView groupHomeByGroupId(
-            @PathVariable(name = "groupId") String groupId,
-            Model model
+            @PathVariable(name = "groupId") String groupId
     ){
         ModelAndView modelAndView = new ModelAndView("group/home");
         modelAndView.addObject("groupId", groupId);
@@ -26,8 +24,6 @@ public class GroupViewController {
             @PathVariable(name = "groupId") String groupId
     ){
         ModelAndView modelAndView = new ModelAndView("group/event/list");
-        System.out.println("################manageEvent###############");
-        System.out.println(groupId);
         modelAndView.addObject("groupId", groupId);
         return modelAndView;
     }
@@ -38,12 +34,8 @@ public class GroupViewController {
             @PathVariable(name = "eventId") String eventId
     ){
         ModelAndView modelAndView = new ModelAndView("group/event/detail");
-        System.out.println("################manageEventDetail###############");
-        System.out.println(groupId + "   " + eventId);
-
         modelAndView.addObject("groupId", groupId);
         modelAndView.addObject("eventId", eventId);
-
         return modelAndView;
     }
 }
