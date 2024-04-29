@@ -42,7 +42,7 @@ public class ViewController {
 	}
 
 	@GetMapping("/api/group")
-	public String managerHome() { return "group/home"; }
+	public String managerHome() { return "group/link"; }
 
 //	@GetMapping("/api/group/{groupId}")
 //	public String groupHomeByGroupId(

@@ -16,11 +16,8 @@ public class GroupViewController {
             @PathVariable(name = "groupId") String groupId,
             Model model
     ){
-        ModelAndView modelAndView = new ModelAndView("group/event/list");
+        ModelAndView modelAndView = new ModelAndView("group/home");
         modelAndView.addObject("groupId", groupId);
-        System.out.println("################groupHomeByGroupId###############");
-        System.out.println("groupHomeByGroupId" + groupId);
-
         return modelAndView;
     }
 
