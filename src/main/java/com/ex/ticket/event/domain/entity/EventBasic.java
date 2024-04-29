@@ -18,6 +18,8 @@ public class EventBasic {
     private LocalDateTime startAt;
     private Long runTime;
 
+    private String address;
+
     protected Boolean isUpdated() {
         return this.name != null && this.startAt != null && this.runTime != null;
     }
@@ -27,9 +29,10 @@ public class EventBasic {
     }
 
     @Builder
-    public EventBasic(String name, LocalDateTime startAt, Long runTime) {
+    public EventBasic(String name, LocalDateTime startAt, Long runTime, String address) {
         this.name = name;
         this.startAt = startAt;
         this.runTime = runTime;
+        this.address = address;
     }
 }

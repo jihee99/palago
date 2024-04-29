@@ -57,6 +57,8 @@ public class EventService {
 	}
 
 	private void validateEventBasicExistence(Event event) {
+		System.out.println("===========validateEventBasicExistence===============");
+		System.out.println(!event.hasEventBasic() || !event.hasEventPlace());
 		if (!event.hasEventBasic() || !event.hasEventPlace())
 			throw CannotOpenEventException.EXCEPTION;
 	}

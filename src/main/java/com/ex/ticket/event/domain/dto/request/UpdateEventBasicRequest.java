@@ -34,5 +34,7 @@ public class UpdateEventBasicRequest {
 	@Positive(message = "얘상 소요시간(분)을 입력하세요")
 	private Long runTime;
 
-
+	@Schema(defaultValue = "도로명 주소", description = "주소")
+	@NotBlank(message = "주소를 입력하세요")
+	private String address;
 }

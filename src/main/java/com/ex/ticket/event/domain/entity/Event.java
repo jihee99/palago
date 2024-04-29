@@ -30,9 +30,6 @@ public class Event extends BaseTimeEntity {
     // 호스트 정보
     private Long groupId;
 
-    // 주소
-    private String eventPlace;
-    
     @Embedded private EventBasic eventBasic;
 
     @Embedded private EventDetail eventDetail;
@@ -56,7 +53,7 @@ public class Event extends BaseTimeEntity {
     }
 
     public Boolean hasEventPlace() {
-        return this.eventPlace != null && this.eventPlace.isEmpty();
+        return this.eventBasic.getAddress() != null && !this.eventBasic.getAddress().isEmpty();
     }
 
     public Boolean hasEventDetail() {

@@ -57,6 +57,7 @@ public class EventMapper {
 				.name(updateEventBasicRequest.getName())
 				.runTime(updateEventBasicRequest.getRunTime())
 				.startAt(updateEventBasicRequest.getStartAt())
+				.address(updateEventBasicRequest.getAddress())
 				.build();
 	}
 

@@ -18,6 +18,7 @@ public class EventBasicVo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endAt;
     private Long runTime;
+    private String address;
 
     public static EventBasicVo from(Event event) {
         EventBasic eventBasic = event.getEventBasic();
@@ -29,6 +30,7 @@ public class EventBasicVo {
                 .startAt(eventBasic.getStartAt())
                 .endAt(event.getEndAt())
                 .runTime(eventBasic.getRunTime())
+                .address(eventBasic.getAddress())
                 .build();
     }
 }
