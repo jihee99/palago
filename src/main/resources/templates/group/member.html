@@ -41,7 +41,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="register-form">
+                        <form id="modify-form">
                             <label for="email" class="form-label">이메일</label>
                             <input type="text" id="email" name="email" class="form-control">
                             <input type="text" id="userId" name="userId" class="form-control" style="display: none;">
@@ -53,14 +53,11 @@
                                 <option value="GUEST">게스트</option>
                             </select>
 
-
-
-
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
-                        <button type="button" class="btn btn-primary" onclick="registerEvent()">등록하기</button>
+                        <button id="update-btn" type="button" class="btn btn-primary">등록하기</button>
                     </div>
                 </div>
             </div>

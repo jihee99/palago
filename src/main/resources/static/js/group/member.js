@@ -7,6 +7,29 @@
     });
 
 
+    $('#update-btn').on('click',function(e){
+        let formData = $('#modify-form').serializeArray();
+        let param = {};
+        formData.forEach(function(item) {
+            param[item.name] = item.value;
+        });
+
+        $.ajax({
+            type: "POST",
+            url: `/api/group/master/${$groupId}/role`,
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(response){
+                alert("매니저 권한 수정이 완료되었습니다.")
+                init();
+                $('#manager-modal').modal('hide');
+            },
+            error: function(xhr, status, error){
+                console.error("에러 내용: ", error);
+                alert("매니저 권한 수정에 실패했습니다.\n관리자에게 문의하세요.")
+            }
+        });
+    });
 
     function init(){
         $.ajax({
@@ -14,7 +37,6 @@
             url: `/api/group/manage/${$groupId}/list`,
             success: function(response){
                 console.log("매니저리스트", response);
-                // 테이블 그리는 함수 호출
                 generateTable(response.groupUsers);
             },
             error: function(xhr, status, error){
@@ -57,7 +79,6 @@
                         button.className = "detail-button btn btn-sm btn-secondary";
 
                         button.addEventListener("click", function() {
-
                             console.log(rowData);
 
                             $('#userId').val(rowData.userId);
@@ -70,6 +91,7 @@
 
                             $('#manager-modal').modal('show');
                         });
+
                         return button;
                 }}
             ]
