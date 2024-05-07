@@ -60,4 +60,5 @@ public class GroupViewController {
         modelAndView.addObject("eventId", eventId);
         return modelAndView;
     }
+
 }

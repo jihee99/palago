@@ -44,7 +44,6 @@ public class GroupController {
 	@Operation(summary = "그룹에 속한 매니저 리스트를 가져옵니다.")
 	@GetMapping("/{groupId}/list")
 	public GroupUserResponse getAllGroupUsers(@PathVariable Long groupId) {
-		System.out.println("======= getAllGroupUsers =======");
 		return readGroupUserUseCase.execute(groupId);
 	}
 

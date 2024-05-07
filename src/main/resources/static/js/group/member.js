@@ -31,6 +31,58 @@
         });
     });
 
+
+    $('#search-btn').on('click',function(e){
+        let searchWindow = window.open('', '_blank', 'width=400,height=200');
+
+        searchWindow.document.body.innerHTML = windowHTML;
+
+        // // 새로운 창이 로드되었을 때 이벤트를 처리합니다.
+        // searchWindow.onload = function() {
+        //     // 새로운 창의 DOM에 접근하여 검색 결과를 처리합니다.
+        //     var searchForm = searchWindow.document.getElementById('search-form');
+        //     searchForm.addEventListener('submit', function(event) {
+        //         event.preventDefault();
+        //         var searchResult = searchForm.querySelector('input[name="searchResult"]').value;
+        //         // 검색 결과를 원하는 방식으로 처리합니다.
+        //         document.getElementById('email').value = searchResult;
+        //         // 새로운 창을 닫습니다.
+        //         searchWindow.close();
+        //     });
+        // };
+
+        searchWindow.document.getElementById('find-btn').addEventListener('click', function() {
+            let emailInput = searchWindow.document.querySelector('input[name="email"]').value;
+            console.log(emailInput)
+            // 검색 결과를 표시합니다.
+
+
+            $.ajax({
+                type: "GET",
+                url: `/api/group/manage/${$groupId}/invite/users`,
+                data: {
+                    'email': emailInput
+                },
+                success: function(response){
+                    searchWindow.document.getElementById('result').innerHTML = '검색 결과: ' + emailInput;
+                },
+                error: function(xhr, status, error){
+                    alert("존재하지 않는 회원입니다.");
+                }
+            })
+
+        });
+
+        searchWindow.document.getElementById('cancel-btn').addEventListener('click', function() {
+            searchWindow.close();
+        });
+
+        searchWindow.document.getElementById('confirm-btn').addEventListener('click', function() {
+            // 여기에 확인 버튼을 클릭했을 때 수행할 동작을 추가하세요.
+        });
+
+    })
+
     function init(){
         $.ajax({
             type: "GET",
@@ -41,7 +93,6 @@
             },
             error: function(xhr, status, error){
                 console.error("에러 내용: ", error);
-                alert("전시 상태를 확인하세요");
             }
         })
     }
@@ -97,5 +148,16 @@
             ]
         })
     }
+
+    const windowHTML = '<h4>회원찾기</h4>\n' +
+        '        <div>\n' +
+        '            <input type="text" name="email">\n' +
+        '            <button id="find-btn">찾기</button>\n' +
+        '        </div>\n' +
+        '        <div id="result" style="padding-top:5px;"></div>\n' +
+        '        <div style="padding-top:5px;">\n' +
+        '            <button>취소</button>\n' +
+        '            <button>확인</button>\n' +
+        '        </div>'
 
 })(jQuery);

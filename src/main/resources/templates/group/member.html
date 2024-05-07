@@ -37,7 +37,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="register-modal-label">매니저 권한 변경</h1>
+                        <h1 class="modal-title fs-5" id="manager-modal-label">매니저 권한 변경</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -52,7 +52,6 @@
                                 <option value="MANAGER">매니저</option>
                                 <option value="GUEST">게스트</option>
                             </select>
-
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -61,6 +60,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal fade" id="register-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="register-modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="register-modal-label">신규 매니저 등록</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="register-form">
+                            <label for="email" class="form-label">회원찾기</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" name="email" class="form-control" readonly>
+                                </div>
+                                <div class="col-auto">
+                                    <a id="search-btn" class="btn btn-primary">회원찾기</a>
+                                </div>
+                            </div>
+
+                            <label for="role" class="mt-3 form-label">권한</label>
+                            <select name="role" class="form-select">
+                                <option value="MANAGER">매니저</option>
+                                <option value="GUEST">게스트</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+                        <button id="register-btn" type="button" class="btn btn-primary">등록하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </th:block>
 
