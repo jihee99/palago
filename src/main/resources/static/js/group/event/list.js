@@ -258,7 +258,6 @@ $(document).ready(function(){
                 console.log(errorMessage);
 
                 alert(errorMessage);
-
             });
 
     }

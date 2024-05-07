@@ -6,6 +6,8 @@ import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
 import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
 import com.ex.ticket.security.jwt.TokenService;
 import com.ex.ticket.user.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,6 +79,13 @@ public class SecurityConfig {
 				// .anyRequest().authenticated()
 				.anyRequest().permitAll()
 			)
+			// .logout(logout -> logout
+			// 	.logoutUrl("/logout") // 로그아웃 URL 설정
+			// 	.permitAll() // 로그아웃 URL은 인증되지 않은 사용자도 접근 가능하도록 설정
+			// 	.logoutSuccessHandler((request, response, authentication) -> {
+			// 		response.setStatus(HttpServletResponse.SC_OK);
+			// 	})
+			// )
 //			.addFilterBefore(new MyFilter1(), UsernamePasswordAuthenticationFilter.class)
 
 

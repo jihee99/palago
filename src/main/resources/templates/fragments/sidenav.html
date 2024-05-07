@@ -15,10 +15,12 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-info"></i></div>
                         그룹정보
                     </a>
-                    <a class="nav-link" th:href="@{/api/group/__${groupId}__/manager}">
-                        <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card"></i></div>
-                         매니저
-                    </a>
+                    <th:block th:if="${role eq 'MASTER'}">
+                        <a class="nav-link" th:href="@{/api/group/__${groupId}__/manager}">
+                            <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card"></i></div>
+                             매니저
+                        </a>
+                    </th:block>
                     <a class="nav-link" th:href="@{/api/group/__${groupId}__/event}">
                         <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar"></i></div>
                         이벤트

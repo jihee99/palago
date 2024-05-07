@@ -44,9 +44,10 @@ public class AuthController {
 	// }
 
 	@Operation(summary = "로그아웃을 합니다.")
-	@SecurityRequirement(name = PalagoStatic.ACCESS_TOKEN)
+	// @SecurityRequirement(name = PalagoStatic.ACCESS_TOKEN)
 	@PostMapping("/logout")
 	public ResponseEntity logoutUser() {
+		System.out.println("loggoiut@@@@@@@@@@@@");
 		logoutUseCase.execute();
 		return ResponseEntity.ok().headers(cookieHelper.deleteCookies()).body(null);
 	}
