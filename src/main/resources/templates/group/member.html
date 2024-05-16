@@ -14,30 +14,94 @@
     </th:block>
 </head>
 <body>
-    <th:block layout:fragment="content_body">
-        <h3 class="mt-4 mb-4">그룹매니저 관리하기</h3>
-        <div class="card">
-            <div class="card-header">
-                <i class="fa-regular fa-address-card me-1"></i>
-                그룹매니저 목록
+<th:block layout:fragment="content_body">
+    <h3 class="mt-4 mb-4">그룹매니저 관리하기</h3>
+    <div class="card">
+        <div class="card-header">
+            <i class="fa-regular fa-address-card me-1"></i>
+            그룹매니저 목록
+        </div>
+        <div class="card-body">
+            <div id="group-div">
+                <div id="groupIdContainer" th:data-group-id="${groupId}" style="display: none;"></div>
+                <div class="mb-4 text-md-end">
+                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규매니저등록</button>
+                </div>
+                <div id="table"></div>
             </div>
-            <div class="card-body">
-                <div id="group-div">
-                    <div id="groupIdContainer" th:data-group-id="${groupId}" style="display: none;"></div>
-                    <div class="mb-4 text-md-end">
-                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#register-modal">신규매니저등록</button>
-                    </div>
-                    <div id="table"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="manager-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="manager-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="manager-modal-label">매니저 권한 변경</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modify-form">
+                        <label for="email" class="form-label">이메일</label>
+                        <input type="text" id="email" name="email" class="form-control">
+                        <input type="text" id="userId" name="userId" class="form-control" style="display: none;">
+
+                        <label for="role" class="form-label">권한</label>
+                        <select id="role" name="role" class="form-select">
+                            <option value="MASTER">마스터</option>
+                            <option value="MANAGER">매니저</option>
+                            <option value="GUEST">게스트</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+                    <button id="update-btn" type="button" class="btn btn-primary">등록하기</button>
                 </div>
             </div>
-
-
         </div>
-    </th:block>
+    </div>
 
-    <th:block layout:fragment="page_js">
-        <script th:src="@{/js/group/member.js}"></script>
-    </th:block>
+    <div class="modal fade" id="register-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="register-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="register-modal-label">신규 매니저 등록</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <label for="email" class="form-label">회원찾기</label>
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" name="email" class="form-control" readonly>
+                            </div>
+                            <div class="col-auto">
+                                <a id="search-btn" class="btn btn-primary">회원찾기</a>
+                            </div>
+                        </div>
+
+                        <label for="role" class="mt-3 form-label">권한</label>
+                        <select name="role" class="form-select">
+                            <option value="MANAGER">매니저</option>
+                            <option value="GUEST">게스트</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+                    <button id="register-btn" type="button" class="btn btn-primary">등록하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+<th:block layout:fragment="page_js">
+    <script th:src="@{/js/group/member.js}"></script>
+</th:block>
 
 </body>
 </html>
