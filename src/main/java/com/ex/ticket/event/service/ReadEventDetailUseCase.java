@@ -24,6 +24,10 @@ public class ReadEventDetailUseCase {
 		final Group group = commonGroupService.findById(event.getGroupId());
 		final Long userId = userUtils.getCurrentUserId();
 		// 호스트 유저가 아닐 경우 준비 상태일 때 조회할 수 없음
+
+
+		System.out.println("event가 준비중인가? : "+ event.isPreparing());
+		System.out.println("host 유저가 아닌경우? : "+ group.isActiveGroupUserId(userId));
 		if (event.isPreparing() && !group.isActiveGroupUserId(userId)) {
 			throw EventNotOpenException.EXCEPTION;
 		}

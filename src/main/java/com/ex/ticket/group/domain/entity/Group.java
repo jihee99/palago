@@ -79,9 +79,20 @@ public class Group {
                         && groupUser.getRole().equals(GroupUserRole.MANAGER));
     }
 
+//    public Boolean isActiveGroupUserId(Long userId) {
+//        return this.groupUsers.stream()
+//            .anyMatch(groupUser -> groupUser.getUserId().equals(userId) && groupUser.getActive());
+//    }
+
     public Boolean isActiveGroupUserId(Long userId) {
-        return this.groupUsers.stream()
-            .anyMatch(groupUser -> groupUser.getUserId().equals(userId) && groupUser.getActive());
+        for (GroupUser groupUser : this.groupUsers) {
+            if (groupUser.getUserId().equals(userId) && groupUser.getActive()) {
+                System.out.println("User ID: " + groupUser.getUserId() + ", Active: " + groupUser.getActive());
+                // 여기서 원하는 다른 정보도 출력할 수 있습니다.
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setGroupUserRole(Long userId, GroupUserRole role) {
