@@ -34,22 +34,24 @@ $(document).ready(function(){
                 }
 
                 button.addEventListener("click", function() {
-                    $.ajax({
-                        type: "GET",
-                        url: `/api/group/event/${rowData.eventId}/open`,
-                        contentType: "application/json",
-                        success: function(response){
-                            console.log("요청이 성공했습니다.");
-                            console.log("서버로부터의 응답: ", response);
+                    if (confirm("전시를 오픈 상태로 변경하시겠습니까?")) {
+                        $.ajax({
+                            type: "GET",
+                            url: `/api/group/event/${rowData.eventId}/open`,
+                            contentType: "application/json",
+                            success: function(response){
+                                console.log("요청이 성공했습니다.");
+                                console.log("서버로부터의 응답: ", response);
 
-                            reloadData();
-                        },
-                        error: function(xhr, status, error){
-                            console.log(xhr)
-                            console.error("요청이 실패했습니다.");
-                            console.error("에러 내용: ", error);
-                        }
-                    });
+                                reloadData();
+                            },
+                            error: function(xhr, status, error){
+                                console.log(xhr)
+                                console.error("요청이 실패했습니다.");
+                                console.error("에러 내용: ", error);
+                            }
+                        });
+                    }
                 });
                 return button;
             }},
@@ -59,9 +61,9 @@ $(document).ready(function(){
                 button.textContent = "상태변경";
                 button.className = "detail-button btn btn-sm btn-primary";
 
-                var selectedStatus = rowData.status;
+                let selectedStatus = rowData.status;
 
-                var statusSelect = $('#status');
+                let statusSelect = $('#status');
 
                 statusSelect.find('option').each(function() {
                     if ($(this).text() === selectedStatus) {
@@ -79,10 +81,17 @@ $(document).ready(function(){
                 return button;
             }},
             {title: "수정", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) =>  {
+                const rowData = cell.getRow().getData();
+
+                    console.log(rowData)
                 let button = document.createElement("button");
                 button.textContent = "수정";
                 button.className = "detail-button btn btn-sm btn-secondary";
-
+                
+                if(rowData.status == '진행중'){
+                    button.disabled = true
+                }
+                
                 button.addEventListener("click", function() {
                     const rowData = cell.getRow().getData();
                     console.log("Detail button clicked for row:", rowData);
@@ -97,23 +106,25 @@ $(document).ready(function(){
                 button.className = "detail-button btn btn-sm btn-danger";
 
                 button.addEventListener("click", function() {
-                    const rowData = cell.getRow().getData();
+                    if(confirm("이벤트를 삭제하시겠습니까?")){
+                        const rowData = cell.getRow().getData();
 
-                    console.log("delete button clicked for row:", rowData);
-                    //TODO /api/group/{groupId}/event/{eventId}/delete ajax 요청하기
-                    $.ajax({
-                        type: "GET",
-                        url: `/api/group/event/${rowData.eventId}/delete`,
-                        success: function(response){
-                            console.log("요청이 성공했습니다.");
-                            console.log("서버로부터의 응답: ", response);
-                            reloadData();
-                        },
-                        error: function(xhr, status, error){
-                            console.error("요청이 실패했습니다.");
-                            console.error("에러 내용: ", error);
-                        }
-                    })
+                        console.log("delete button clicked for row:", rowData);
+                        //TODO /api/group/{groupId}/event/{eventId}/delete ajax 요청하기
+                        $.ajax({
+                            type: "GET",
+                            url: `/api/group/event/${rowData.eventId}/delete`,
+                            success: function(response){
+                                console.log("요청이 성공했습니다.");
+                                console.log("서버로부터의 응답: ", response);
+                                reloadData();
+                            },
+                            error: function(xhr, status, error){
+                                console.error("요청이 실패했습니다.");
+                                console.error("에러 내용: ", error);
+                            }
+                        })
+                    }
                 });
                 // Return the button element
                 return button;
@@ -135,24 +146,26 @@ $(document).ready(function(){
         let param = {
             'status' : $('#status').val()
         };
-        console.log(param)
-        $.ajax({
-            type: "POST",
-            url: `/api/group/event/${$eventId}/status`,
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(response){
-                console.log("요청이 성공했습니다.");
-                console.log("서버로부터의 응답: ", response);
-                reloadData();
-                $('#status-modal').modal('hide');
-            },
-            error: function(xhr, status, error){
-                console.error("요청이 실패했습니다.");
-                console.error("에러 내용: ", error);
-                alert("전시 상태를 확인하세요");
-            }
-        })
+
+        if(confirm("전시 상태를 변경하시겠습니까?")){
+            $.ajax({
+                type: "POST",
+                url: `/api/group/event/${$eventId}/status`,
+                contentType: "application/json",
+                data: JSON.stringify(param),
+                success: function(response){
+                    console.log("요청이 성공했습니다.");
+                    console.log("서버로부터의 응답: ", response);
+                    reloadData();
+                    $('#status-modal').modal('hide');
+                },
+                error: function(xhr, status, error){
+                    console.error("요청이 실패했습니다.");
+                    console.error("에러 내용: ", error);
+                    alert("전시 상태를 확인하세요");
+                }
+            });
+        }
     })
 
     // 이벤트 등록 함수
@@ -244,7 +257,8 @@ $(document).ready(function(){
 
             $('#modify-modal').modal('hide');
             $('#modify-form')[0].reset();
-            alert("success")
+
+            alert("요청이 성공했습니다.");
             reloadData();
 
             }).fail(function(xhr, status, error){
