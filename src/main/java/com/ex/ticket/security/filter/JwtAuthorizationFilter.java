@@ -1,7 +1,9 @@
-package com.ex.ticket.security.jwt;
+package com.ex.ticket.security.filter;
 
 import com.ex.ticket.auth.PrincipalDetails;
 import com.ex.ticket.common.PalagoStatic;
+import com.ex.ticket.security.jwt.AccessTokenInfo;
+import com.ex.ticket.security.jwt.TokenService;
 import com.ex.ticket.user.domain.entity.User;
 import com.ex.ticket.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -41,8 +43,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		IOException,
 		ServletException {
 
-		System.out.println("인증이나 권한이 필요한 주소가 요청됨");
-
 		// header가 있는지 확인
 //		if(isNullToken(request)) {
 //			chain.doFilter(request, response);
@@ -53,11 +53,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //		String jwtToken = request.getHeader(PalagoStatic.AUTH_HEADER).replace(PalagoStatic.BEARER, "");
 
 		String token = resolveToken(request);
-
+		System.out.println("============ resolve token ============");
+		System.out.println(token);
 		if (token != null) {
-			System.out.println("token 있다");
-			System.out.println(token);
-
 			Authentication authentication = getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
@@ -121,6 +119,5 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		return new UsernamePasswordAuthenticationToken(
 				userDetails, "user", userDetails.getAuthorities());
 	}
-
 
 }

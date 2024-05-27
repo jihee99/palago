@@ -1,9 +1,10 @@
-package com.ex.ticket.security.jwt;
+package com.ex.ticket.security.filter;
 
 import com.ex.ticket.auth.PrincipalDetails;
 import com.ex.ticket.auth.model.dto.TokenAndUserResponse;
 import com.ex.ticket.common.PalagoStatic;
 import com.ex.ticket.security.CookieHelper;
+import com.ex.ticket.security.jwt.TokenService;
 import com.ex.ticket.user.domain.dto.request.SignInRequest;
 import com.ex.ticket.user.domain.entity.User;
 import com.ex.ticket.user.repository.UserRepository;
@@ -108,8 +109,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.ACCESS_TOKEN).toString());
 		response.addHeader(HttpHeaders.SET_COOKIE, cookies.get(PalagoStatic.REFRESH_TOKEN).toString());
-
-		System.out.println("---success authentication---");
 
 //		customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
 //			this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);

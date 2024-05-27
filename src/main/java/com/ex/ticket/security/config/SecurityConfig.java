@@ -1,11 +1,13 @@
 package com.ex.ticket.security.config;
 
 import com.ex.ticket.security.CookieHelper;
+import com.ex.ticket.security.filter.JwtAuthenticationFilter;
+import com.ex.ticket.security.filter.JwtAuthorizationFilter;
+import com.ex.ticket.security.filter.JwtExceptionFilter;
 import com.ex.ticket.security.handler.CustomAuthenticationSuccessHandler;
-import com.ex.ticket.security.jwt.JwtAuthenticationFilter;
-import com.ex.ticket.security.jwt.JwtAuthorizationFilter;
 import com.ex.ticket.security.jwt.TokenService;
 import com.ex.ticket.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,15 +57,13 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http
-			// .addFilterBefore(new MyFilter3(), SecurityContextHolderFilter.class)
-
 			.csrf(CsrfConfigurer<HttpSecurity>::disable)
 			.httpBasic((httpBasic) -> httpBasic.disable())
-
 			.sessionManagement(sessionManagement  -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 //			.addFilter(corsFilter)
 			.formLogin(AbstractHttpConfigurer::disable)
+			.logout(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(requests -> requests
 				.requestMatchers(allowedUrls).permitAll()
 
@@ -77,7 +77,6 @@ public class SecurityConfig {
 				// .anyRequest().authenticated()
 				.anyRequest().permitAll()
 			)
-//			.addFilterBefore(new MyFilter1(), UsernamePasswordAuthenticationFilter.class)
 
 
 			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository, cookieHelper),
@@ -85,8 +84,8 @@ public class SecurityConfig {
 
 			.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), tokenService, userRepository),
 				BasicAuthenticationFilter.class)
-		// AuthenticationManager 을 필수로 전달해줘야함
-		;
+
+			.addFilterBefore(new JwtExceptionFilter(new ObjectMapper()), JwtAuthorizationFilter.class);
 
 		return http.build();
 

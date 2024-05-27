@@ -127,7 +127,6 @@ $(document).ready(function(){
         // }
         // console.log(data)
 
-        console.log(JSON.stringify(param))
         $.ajax({
             type: "POST",
             url: `/api/group/event/${$eventId}/ticketItems`,

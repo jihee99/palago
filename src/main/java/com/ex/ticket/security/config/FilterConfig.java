@@ -1,28 +1,22 @@
 // package com.ex.ticket.security.config;
 //
-// import org.springframework.boot.web.servlet.FilterRegistrationBean;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
+// import com.ex.ticket.security.filter.JwtAuthenticationFilter;
+// import com.ex.ticket.security.filter.JwtAuthorizationFilter;
+// import com.ex.ticket.security.filter.JwtExceptionFilter;
+// import lombok.RequiredArgsConstructor;
+// import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+// import org.springframework.security.web.DefaultSecurityFilterChain;
+// import org.springframework.stereotype.Component;
 //
-// import com.ex.ticket.security.filter.MyFilter1;
-// import com.ex.ticket.security.filter.MyFilter2;
+// @RequiredArgsConstructor
+// @Component
+// public class FilterConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 //
-// @Configuration
-// public class FilterConfig {
+//     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+//     private final JwtExceptionFilter jwtExceptionFilter;
 //
-// 	@Bean
-// 	public FilterRegistrationBean<MyFilter1> filter1(){
-// 		FilterRegistrationBean<MyFilter1> bean = new FilterRegistrationBean<>(new MyFilter1());
-// 		bean.addUrlPatterns("/*");
-// 		bean.setOrder(0);
-// 		return bean;
-// 	}
 //
-// 	@Bean
-// 	public FilterRegistrationBean<MyFilter2> filter2(){
-// 		FilterRegistrationBean<MyFilter2> bean = new FilterRegistrationBean<>(new MyFilter2());
-// 		bean.addUrlPatterns("/*");
-// 		bean.setOrder(1);
-// 		return bean;
-// 	}
+//
 // }

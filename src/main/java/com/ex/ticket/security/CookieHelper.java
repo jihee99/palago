@@ -39,6 +39,10 @@ public class CookieHelper {
         result.put(PalagoStatic.ACCESS_TOKEN, accessToken);
         result.put(PalagoStatic.REFRESH_TOKEN, refreshToken);
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, accessToken.toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, refreshToken.toString());
+
         return result;
 //        HttpHeaders httpHeaders = new HttpHeaders();
 //        httpHeaders.add(HttpHeaders.SET_COOKIE, accessToken.toString());
@@ -51,8 +55,7 @@ public class CookieHelper {
         String sameSite = "None";
 
         System.out.println("==========쿠키헬퍼의 deleteCookie==========");
-        ResponseCookie accessToken =
-                ResponseCookie.from("accessToken", null)
+        ResponseCookie accessToken = ResponseCookie.from("accessToken", null)
                         .path("/")
                         .maxAge(0)
                         .sameSite(sameSite)

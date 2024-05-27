@@ -1,16 +1,14 @@
 package com.ex.ticket.user.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.ex.ticket.user.domain.entity.AccountState;
 import com.ex.ticket.user.domain.entity.User;
 import com.ex.ticket.user.exception.UserNotFoundException;
 import com.ex.ticket.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,7 +18,7 @@ public class CommonUserService {
 	private final UserRepository userRepository;
 
 
-	public User queryMember(Long userId) {
+	public User queryUser(Long userId) {
 		return userRepository.findById(userId).orElseThrow(() -> UserNotFoundException.EXCEPTION);
 	}
 
