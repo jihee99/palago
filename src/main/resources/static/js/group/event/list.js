@@ -23,6 +23,41 @@ $(document).ready(function(){
             {title: "종료일시", field: "endAt", minWidth: 200, formatter: dateTimeFormatter},
             {title: "진행시간", field: "runTime", minWidth: 200},
             {title: "오픈여부", field: "status", minWidth: 180},
+            {title: "수정", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) =>  {
+                    const rowData = cell.getRow().getData();
+
+                    console.log(rowData)
+                    let button = document.createElement("button");
+                    button.textContent = "수정";
+                    button.className = "detail-button btn btn-sm btn-secondary";
+
+                    if(rowData.status == '진행중'){
+                        button.disabled = true
+                    }
+
+                    button.addEventListener("click", function() {
+                        const rowData = cell.getRow().getData();
+                        console.log("Detail button clicked for row:", rowData);
+
+                        window.location.href = `/api/group/${$groupId}/event/${rowData.eventId}/detail`;
+                    });
+                    return button;
+                }},
+            {title: "", minWidth: 80, maxWidth: 80, formatter: (cell, formatterParams, onRendered) =>  {
+                    const rowData = cell.getRow().getData();
+                    let button = document.createElement("button");
+                    button.textContent = "준비중";
+                    button.className = "detail-button btn btn-sm btn-primary";
+
+                    let selectedStatus = rowData.status;
+
+                    button.addEventListener("click", function() {
+                        $eventId = rowData.eventId;
+                        $('#status-modal').modal('show');
+                    });
+
+                    return button;
+            }},
             {title: "", minWidth: 90, maxWidth: 100,  formatter:(cell, formatterParams, onRendered) => {
                 const rowData = cell.getRow().getData();
                 let button = document.createElement("button");
@@ -55,51 +90,25 @@ $(document).ready(function(){
                 });
                 return button;
             }},
-            {title: "상태변경", minWidth: 90, maxWidth: 100, formatter: (cell, formatterParams, onRendered) =>  {
-                const rowData = cell.getRow().getData();
-                let button = document.createElement("button");
-                button.textContent = "상태변경";
-                button.className = "detail-button btn btn-sm btn-primary";
-
-                let selectedStatus = rowData.status;
-
-                let statusSelect = $('#status');
-
-                statusSelect.find('option').each(function() {
-                    if ($(this).text() === selectedStatus) {
-                        $(this).prop('selected', true);
-                    } else {
-                        $(this).prop('selected', false);
-                    }
-                });
-
-                button.addEventListener("click", function() {
-                    $eventId = rowData.eventId;
-                    $('#status-modal').modal('show');
-                });
-
-                return button;
-            }},
-            {title: "수정", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) =>  {
-                const rowData = cell.getRow().getData();
-
-                    console.log(rowData)
-                let button = document.createElement("button");
-                button.textContent = "수정";
-                button.className = "detail-button btn btn-sm btn-secondary";
-                
-                if(rowData.status == '진행중'){
-                    button.disabled = true
-                }
-                
-                button.addEventListener("click", function() {
+            {title: "", minWidth: 90, maxWidth: 100, formatter: (cell, formatterParams, onRendered) =>  {
                     const rowData = cell.getRow().getData();
-                    console.log("Detail button clicked for row:", rowData);
+                    let button = document.createElement("button");
+                    button.textContent = "종료하기";
+                    button.className = "detail-button btn btn-sm btn-primary";
+                    console.log(rowData)
 
-                    window.location.href = `/api/group/${$groupId}/event/${rowData.eventId}/detail`;
-                });
-                return button;
-            }},
+                    if(rowData.status != '진행중' || rowData.content == null){
+                        button.disabled = true
+                    }
+
+
+                    button.addEventListener("click", function() {
+                        $eventId = rowData.eventId;
+                        $('#status-modal').modal('show');
+                    });
+
+                    return button;
+                }},
             {title: "삭제", minWidth:60, maxWidth:65, formatter: (cell, formatterParams, onRendered) => {
                 let button = document.createElement("button");
                 button.textContent = "삭제";
