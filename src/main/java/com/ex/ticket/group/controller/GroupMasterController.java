@@ -1,5 +1,6 @@
 package com.ex.ticket.group.controller;
 
+import com.ex.ticket.common.annotation.MasterAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "2. 그룹관리 API(마스터용)")
 @RequestMapping("/api/group/master")
 @RestController
+@MasterAuthorize
 @RequiredArgsConstructor
 public class GroupMasterController {
 	private final CreateGroupUseCase createGroupUseCase;

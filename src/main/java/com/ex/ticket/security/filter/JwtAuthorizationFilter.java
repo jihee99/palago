@@ -55,6 +55,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		String token = resolveToken(request);
 		System.out.println("============ resolve token ============");
 		System.out.println(token);
+
 		if (token != null) {
 			Authentication authentication = getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);

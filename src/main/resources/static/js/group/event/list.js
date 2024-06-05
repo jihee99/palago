@@ -95,12 +95,10 @@ $(document).ready(function(){
                     let button = document.createElement("button");
                     button.textContent = "종료하기";
                     button.className = "detail-button btn btn-sm btn-primary";
-                    console.log(rowData)
 
                     if(rowData.status != '진행중' || rowData.content == null){
                         button.disabled = true
                     }
-
 
                     button.addEventListener("click", function() {
                         $eventId = rowData.eventId;

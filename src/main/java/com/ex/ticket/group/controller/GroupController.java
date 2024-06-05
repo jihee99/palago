@@ -1,5 +1,7 @@
 package com.ex.ticket.group.controller;
 
+import com.ex.ticket.common.annotation.MasterAuthorize;
+import com.ex.ticket.common.annotation.UserAuthorize;
 import com.ex.ticket.common.vo.UserProfileVo;
 import com.ex.ticket.group.domain.dto.request.UpdateGroupRequest;
 import com.ex.ticket.group.domain.dto.response.GroupDetailResponse;
@@ -13,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +38,7 @@ public class GroupController {
 
 	@Operation(summary = "내가 속한 그룹 리스트를 가져옵니다.")
 	@GetMapping
+	@PreAuthorize("hasAuthority('MASTER') or hasAuthority('MANAGER')")
 	public List<GroupProfileResponse> getAllGroups() {
 		List<GroupProfileResponse> list = readGroupsUseCase.execute();
 		log.info("{}", list.stream().toList());
@@ -43,6 +47,7 @@ public class GroupController {
 
 	@Operation(summary = "그룹에 속한 매니저 리스트를 가져옵니다.")
 	@GetMapping("/{groupId}/list")
+	@MasterAuthorize
 	public GroupUserResponse getAllGroupUsers(@PathVariable Long groupId) {
 		return readGroupUserUseCase.execute(groupId);
 	}
@@ -55,6 +60,7 @@ public class GroupController {
 
 	@Operation(summary = "해당 그룹에 가입하지 않은 유저를 이메일로 검색합니다.")
 	@GetMapping("/{groupId}/invite/users")
+	@MasterAuthorize
 	public UserProfileVo getInviteUserListByEmail(
 		@PathVariable Long groupId, @RequestParam(value = "email") @Email String email) {
 		return readInviteUsersUseCase.execute(groupId, email);
@@ -63,6 +69,7 @@ public class GroupController {
 	/* 초대받은 유저 그룹 가입 api */
 	@Operation(summary = "초대받은 그룹에 가입을 승인힙니다.")
 	@PostMapping("/{groupId}/join")
+	@UserAuthorize
 	public GroupDetailResponse joinGroup(@PathVariable Long groupId) {
 		return joinGroupUseCase.execute(groupId);
 	}
@@ -70,6 +77,7 @@ public class GroupController {
 	/* 초대받은 유저 그룹 가입 거절 api */
 	@Operation(summary = "초대받은 그룹에 가입을 거절합니다.")
 	@PostMapping("/{groupId}/reject")
+	@UserAuthorize
 	public GroupDetailResponse rejectGroup(@PathVariable Long groupId) {
 		return rejectGroupUseCase.execute(groupId);
 	}
@@ -77,6 +85,7 @@ public class GroupController {
 	/* 그룹 정보 업데이트 api (단, 매니저이상부터 가능) */
 	@Operation(summary = "그룹 정보를 업데이트 합니다. 매니저 이상부터 가능")
 	@PostMapping("/{groupId}/profile")
+	@PreAuthorize("hasAuthority('MASTER') or hasAuthority('MANAGER')")
 	public GroupDetailResponse patchGroupById(
 		@PathVariable Long groupId, @RequestBody @Valid UpdateGroupRequest updateGroupRequest
 	) {
